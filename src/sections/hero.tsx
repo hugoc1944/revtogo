@@ -6,51 +6,25 @@ import { MotionWrapper } from "@/components/motion-wrapper";
 import { fadeLeft } from "@/lib/motion";
 import { Button } from "@/components/button";
 import { Header } from "./header";
+import clsx from "clsx";
 
 export function Hero() {
   const desktopVideoRef = useRef<HTMLVideoElement | null>(null);
   const mobileVideoRef = useRef<HTMLVideoElement | null>(null);
 
-  const [desktopVideoEnded, setDesktopVideoEnded] = useState(false);
-  const [mobileVideoEnded, setMobileVideoEnded] = useState(false);
   const [mobileVideoReady, setMobileVideoReady] = useState(false);
-
-  useEffect(() => {
-    const desktopVideo = desktopVideoRef.current;
-    const mobileVideo = mobileVideoRef.current;
-
-    if (desktopVideo) {
-      const onEnd = () => setDesktopVideoEnded(true);
-      desktopVideo.addEventListener("ended", onEnd);
-      return () => desktopVideo.removeEventListener("ended", onEnd);
-    }
-
-    if (mobileVideo) {
-      const onEnd = () => setMobileVideoEnded(true);
-      mobileVideo.addEventListener("ended", onEnd);
-      return () => mobileVideo.removeEventListener("ended", onEnd);
-    }
-  }, []);
+  const [showPlate, setShowPlate] = useState(false);
 
   
-
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* ===== BACKGROUND IMAGE (DESKTOP ONLY) ===== */}
       <div className="absolute inset-0 z-0 hidden md:block">
-        <Image
-          src="/header/desktop_start.jpg"
-          alt=""
-          fill
-          priority
-          className="object-cover object-[65%_15%]"
-        />
-
-        
           <video
             ref={desktopVideoRef}
             className="absolute inset-0 w-full h-full object-cover object-[65%_15%]"
             src="/header/desktop_video.mp4"
+            poster="/header/mobile_start.jpg"
             autoPlay
             muted
             playsInline
@@ -77,31 +51,34 @@ export function Hero() {
             />
 
             {/* Static plate — only after video is ready */}
-            {mobileVideoReady && (
+            {showPlate && (
               <div className="absolute inset-0 flex items-start justify-center pt-16 z-10">
                 <Image
                   src="/header/mobile_v1.png"
                   alt="Placa Revtogo"
                   width={320}
                   height={320}
-                  priority
                 />
               </div>
             )}
 
             {/* Video overlay */}
-            {!mobileVideoEnded && (
-              <video
+            <video
               ref={mobileVideoRef}
-              className="absolute inset-0 w-full h-[82vh] object-cover object-[55%_10%]"
+              className={clsx(
+                "absolute inset-0 w-full h-[82vh] object-cover object-[55%_10%] transition-opacity duration-300",
+                mobileVideoReady ? "opacity-100" : "opacity-0"
+              )}
               src="/header/mobile_video.mp4"
               autoPlay
               muted
               playsInline
               preload="metadata"
-              onLoadedData={() => setMobileVideoReady(true)}
-            />
-            )}
+              onLoadedData={() => {
+                setMobileVideoReady(true);
+                requestAnimationFrame(() => setShowPlate(true));
+              }}
+              />
           </div>
 
           {/* Background extension for text */}
