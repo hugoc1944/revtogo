@@ -25,7 +25,7 @@ export function Header() {
       <header
         className={clsx(
           "absolute top-0 left-0 right-0 z-40 transition-opacity",
-          open && "md:opacity-100 opacity-0 pointer-events-none"
+          open && "absolute top-0 left-0 right-0 z-40"
         )}
       >        
       <div className="mx-auto max-w-7xl px-4 py-6 flex items-center">
@@ -84,17 +84,18 @@ export function Header() {
       {/* Mobile full-screen dropdown */}
       <div
         className={clsx(
-          "md:hidden fixed inset-0 z-50 transition-transform duration-500 ease-out",
-          open ? "translate-y-0" : "-translate-y-full"
-        )}
-      >
-        <div className="h-screen bg-surface px-6 pt-6 pb-8 flex flex-col">
+          "md:hidden fixed inset-0 z-50 transition-all duration-500 ease-out",
+          open
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-4 pointer-events-none"
+        )}>
+        <div className="min-h-dvh bg-surface px-6 pt-6 pb-8 flex flex-col">
           {/* Top bar */}
           <div className="flex items-center justify-between mb-10">
             <Image
               src="/brand/Revtogo.png"
               alt="Revtogo"
-              width={120}
+              width={150}
               height={26}
               priority
             />

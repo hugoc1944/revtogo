@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SLIDES } from "./data";
 import { SliderCard } from "./slider-card";
+import { useSectionParallax } from "@/lib/use-section-parallax";
 
 /* ===== DESKTOP CONSTANTS ===== */
 const CARD_WIDTH = 504;
@@ -30,6 +31,8 @@ const MOBILE_VIEWPORT_WIDTH =
   CARD_MOBILE_WIDTH + MOBILE_PARTIAL_WIDTH;
 
 export function ConceptSlider() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  useSectionParallax(sectionRef);
   const [step, setStep] = useState(0);
 
   /* ===== DESKTOP SLIDER MATH ===== */
@@ -71,7 +74,7 @@ export function ConceptSlider() {
       : 0;
 
   return (
-    <section className="bg-bg pt-20 md:pt-30">
+    <section ref={sectionRef} className="bg-bg pt-20 md:pt-30">
       {/* ================= DESKTOP ================= */}
       <div className="hidden md:block">
         <div className="mx-auto max-w-[1400px] px-2">

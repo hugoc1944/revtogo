@@ -13,6 +13,7 @@ export function Hero() {
 
   const [desktopVideoEnded, setDesktopVideoEnded] = useState(false);
   const [mobileVideoEnded, setMobileVideoEnded] = useState(false);
+  const [mobileVideoReady, setMobileVideoReady] = useState(false);
 
   useEffect(() => {
     const desktopVideo = desktopVideoRef.current;
@@ -30,6 +31,8 @@ export function Hero() {
       return () => mobileVideo.removeEventListener("ended", onEnd);
     }
   }, []);
+
+  
 
   return (
     <section className="relative min-h-screen overflow-hidden">
@@ -73,28 +76,31 @@ export function Hero() {
               className="object-cover object-[60%_10%]"
             />
 
-            {/* Static plate (always visible) */}
-            <div className="absolute inset-0 flex items-start justify-center pt-16">
-              <Image
-                src="/header/mobile_v1.png"
-                alt="Placa Revtogo"
-                width={320}
-                height={320}
-                priority
-              />
-            </div>
+            {/* Static plate — only after video is ready */}
+            {mobileVideoReady && (
+              <div className="absolute inset-0 flex items-start justify-center pt-16 z-10">
+                <Image
+                  src="/header/mobile_v1.png"
+                  alt="Placa Revtogo"
+                  width={320}
+                  height={320}
+                  priority
+                />
+              </div>
+            )}
 
             {/* Video overlay */}
             {!mobileVideoEnded && (
               <video
-                ref={mobileVideoRef}
-                className="absolute inset-0 w-full h-[82vh] object-cover object-[55%_10%]"
-                src="/header/mobile_video.mp4"
-                autoPlay
-                muted
-                playsInline
-                preload="metadata"
-              />
+              ref={mobileVideoRef}
+              className="absolute inset-0 w-full h-[82vh] object-cover object-[55%_10%]"
+              src="/header/mobile_video.mp4"
+              autoPlay
+              muted
+              playsInline
+              preload="metadata"
+              onLoadedData={() => setMobileVideoReady(true)}
+            />
             )}
           </div>
 

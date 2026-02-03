@@ -22,7 +22,7 @@ export function ProductGallery() {
   }, []);
 
   /* ===== SIZES ===== */
-  const THUMB_WIDTH = isDesktop ? 122 : 64;
+  const THUMB_WIDTH = isDesktop ? 122 : 80;
   const GAP = isDesktop ? 12 : 6;
   const VISIBLE = 4;
 

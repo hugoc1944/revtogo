@@ -4,7 +4,7 @@ import { BusinessInput } from "@/components/business-input";
 
 export function ProductInfo() {
   return (
-    <div className="flex flex-col gap-5 md:gap-6">
+    <div className="flex flex-col gap-5 md:gap-6 px-1">
       {/* ===== TITLE ===== */}
       <div>
         <h2 className="text-[31px] font-semibold text-ink mb-1">
@@ -16,23 +16,31 @@ export function ProductInfo() {
       </div>
 
       {/* ===== FEATURES ===== */}
-      <ul className="flex flex-col gap-4">
-        {[
-          "<strong>Valor único</strong> — Sem mensalidades!",
-          "Pensada para a identidade <strong>do seu negócio</strong>",
-          "Obtenha avaliações em <strong>4 segundos</strong>",
-        ].map((text) => (
-          <li key={text} className="flex gap-2 md:gap-3 text-[15px] md:text-[16px] text-ink">
+    <ul className="flex flex-col gap-4">
+    {[
+        "<strong>Valor único</strong> — Sem mensalidades!",
+        "Pensada para a identidade <strong>do seu negócio</strong>",
+        "Obtenha avaliações em <strong>4 segundos</strong>",
+    ].map((text) => (
+        <li key={text} className="flex flex-col gap-1">
+        {/* icon + first line */}
+        <div className="flex items-start gap-2 md:gap-3">
             <Image
-              src="/icons/dot-product.png"
-              alt=""
-              width={24}
-              height={18}
+            src="/icons/dot-product.png"
+            alt=""
+            width={24}
+            height={18}
+            className="flex-shrink-0 mt-[3px]"
             />
-            <span dangerouslySetInnerHTML={{ __html: text }} />
-          </li>
-        ))}
-      </ul>
+
+            <span
+            className="text-[15px] md:text-[16px] text-ink"
+            dangerouslySetInnerHTML={{ __html: text }}
+            />
+        </div>
+        </li>
+    ))}
+    </ul>
 
     {/* ===== PRICE / RISK-FREE HIGHLIGHT ===== */}
     <div className="flex flex-col gap-3 mt-3 md:mt-0 max-w-fit">

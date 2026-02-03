@@ -25,13 +25,20 @@ export function SliderCard({ slide, active, mobile }: Props) {
       )}
     >
       {/* Background */}
-      <Image
-        src={slide.image}
-        alt=""
-        fill
-        className="object-cover"
-        priority={active}
-      />
+      <div
+        className="absolute inset-0 will-change-transform transition-transform duration-300 ease-out"
+        style={{
+            transform: "translateY(var(--parallax-y))",
+        }}
+        >
+        <Image
+            src={slide.image}
+            alt=""
+            fill
+            className="object-cover scale-[1.05]"
+            priority={active}
+        />
+        </div>
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-[#0F0F0F] opacity-[0.15]" />
