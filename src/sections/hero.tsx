@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { MotionWrapper } from "@/components/motion-wrapper";
 import { fadeLeft } from "@/lib/motion";
 import { Button } from "@/components/button";
@@ -9,12 +8,12 @@ import { Header } from "./header";
 export function Hero() {
   return (
     <section className="relative min-h-screen overflow-hidden">
-      {/* ===== VIDEO BACKGROUND (ALL DEVICES) ===== */}
-      <div className="absolute inset-0 z-0">
+      {/* ===== DESKTOP VIDEO BACKGROUND ===== */}
+      <div className="absolute inset-0 z-0 hidden md:block">
         <video
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover object-[65%_15%]"
           src="/header/desktop_video.mp4"
-          poster="/header/mobile_start.jpg"
+          poster="/header/desktop_start.jpg"
           autoPlay
           muted
           playsInline
@@ -26,15 +25,26 @@ export function Hero() {
 
       {/* ===== CONTENT LAYER ===== */}
       <div className="relative z-10">
-        {/* ===== MOBILE CONTENT ===== */}
+        {/* ===== MOBILE HERO ===== */}
         <div className="md:hidden relative">
-          {/* Visual spacer */}
-          <div className="relative w-full h-[82vh]" />
+          {/* Visual area — EXACT SAME SIZE & POSITION */}
+          <div className="relative w-full h-[82vh] overflow-hidden -top-[3vh]">
+            {/* 🔁 REPLACED: image + overlay video → single video with poster */}
+            <video
+              className="absolute inset-0 w-full h-full object-cover object-[55%_10%]"
+              src="/header/mobile_video.mp4"
+              poster="/header/mobile_start.jpg"
+              autoPlay
+              muted
+              playsInline
+              preload="metadata"
+            />
+          </div>
 
-          {/* Background extension for text */}
+          {/* Background extension for text — unchanged */}
           <div className="w-full bg-[#C8EFF1] h-[20vh] -mt-[3vh]" />
 
-          {/* TEXT OVERLAY */}
+          {/* TEXT OVERLAY — unchanged */}
           <div className="absolute inset-x-0 top-[67vh] z-20 px-3">
             <MotionWrapper variants={fadeLeft}>
               <div className="text-center space-y-3">
@@ -57,7 +67,7 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ===== DESKTOP CONTENT ===== */}
+        {/* ===== DESKTOP HERO CONTENT — UNCHANGED ===== */}
         <div className="hidden md:block mx-auto max-w-7xl h-screen px-4">
           <div className="grid md:grid-cols-[1.2fr_0.8fr] h-full items-center pt-[120px]">
             <MotionWrapper variants={fadeLeft}>
