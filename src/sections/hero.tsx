@@ -1,85 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { MotionWrapper } from "@/components/motion-wrapper";
 import { fadeLeft } from "@/lib/motion";
 import { Button } from "@/components/button";
 import { Header } from "./header";
-import clsx from "clsx";
 
 export function Hero() {
-  const desktopVideoRef = useRef<HTMLVideoElement | null>(null);
-  const mobileVideoRef = useRef<HTMLVideoElement | null>(null);
-
-  const [mobileVideoReady, setMobileVideoReady] = useState(false);
-  const [showPlate, setShowPlate] = useState(false);
-
-  
   return (
     <section className="relative min-h-screen overflow-hidden">
-      {/* ===== BACKGROUND IMAGE (DESKTOP ONLY) ===== */}
-      <div className="absolute inset-0 z-0 hidden md:block">
-          <video
-            ref={desktopVideoRef}
-            className="absolute inset-0 w-full h-full object-cover object-[65%_15%]"
-            src="/header/desktop_video.mp4"
-            poster="/header/mobile_start.jpg"
-            autoPlay
-            muted
-            playsInline
-            preload="metadata"
-          />
-        
+      {/* ===== VIDEO BACKGROUND (ALL DEVICES) ===== */}
+      <div className="absolute inset-0 z-0">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/header/desktop_video.mp4"
+          poster="/header/mobile_start.jpg"
+          autoPlay
+          muted
+          playsInline
+          preload="metadata"
+        />
       </div>
 
       <Header />
 
       {/* ===== CONTENT LAYER ===== */}
       <div className="relative z-10">
-        {/* ===== MOBILE HERO ===== */}
+        {/* ===== MOBILE CONTENT ===== */}
         <div className="md:hidden relative">
-          {/* Visual area (~90vh) */}
-          <div className="relative w-full h-[82vh] overflow-hidden -top-[3vh]">
-            {/* Background image */}
-            <Image
-              src="/header/mobile_start.jpg"
-              alt=""
-              fill
-              priority
-              className="object-cover object-[60%_10%]"
-            />
-
-            {/* Static plate — only after video is ready */}
-            {showPlate && (
-              <div className="absolute inset-0 flex items-start justify-center pt-16 z-10">
-                <Image
-                  src="/header/mobile_v1.png"
-                  alt="Placa Revtogo"
-                  width={320}
-                  height={320}
-                />
-              </div>
-            )}
-
-            {/* Video overlay */}
-            <video
-              ref={mobileVideoRef}
-              className={clsx(
-                "absolute inset-0 w-full h-[82vh] object-cover object-[55%_10%] transition-opacity duration-300",
-                mobileVideoReady ? "opacity-100" : "opacity-0"
-              )}
-              src="/header/mobile_video.mp4"
-              autoPlay
-              muted
-              playsInline
-              preload="metadata"
-              onLoadedData={() => {
-                setMobileVideoReady(true);
-                requestAnimationFrame(() => setShowPlate(true));
-              }}
-              />
-          </div>
+          {/* Visual spacer */}
+          <div className="relative w-full h-[82vh]" />
 
           {/* Background extension for text */}
           <div className="w-full bg-[#C8EFF1] h-[20vh] -mt-[3vh]" />
@@ -95,8 +45,8 @@ export function Hero() {
                 </h1>
 
                 <p className="text-body-mobile font-medium text-muted px-5">
-                  Uma placa premium com NFC e QR code que torna a avaliação um gesto
-                  natural.
+                  Uma placa premium com NFC e QR code que torna a avaliação um
+                  gesto natural.
                 </p>
 
                 <div className="pt-2 flex justify-center">
@@ -107,7 +57,7 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ===== DESKTOP HERO ===== */}
+        {/* ===== DESKTOP CONTENT ===== */}
         <div className="hidden md:block mx-auto max-w-7xl h-screen px-4">
           <div className="grid md:grid-cols-[1.2fr_0.8fr] h-full items-center pt-[120px]">
             <MotionWrapper variants={fadeLeft}>
