@@ -16,10 +16,10 @@ export function HowItWorks() {
 
         {/* ===== DESKTOP LAYOUT ===== */}
         <div className="hidden md:flex justify-center">
-            <div className="grid grid-cols-[520px_auto] items-center">         
+          <div className="grid grid-cols-[minmax(0,520px)_minmax(0,1fr)] items-center">
             {/* Visual */}
             <MotionWrapper variants={fadeUp}>
-                <div className="relative z-10 w-[503px] h-[535px] rounded-2xl overflow-hidden bg-surface">
+                <div className="relative z-10 w-full h-[535px] rounded-2xl overflow-hidden bg-surface">
                 <Image
                     src="/slider/C3_simplicity.png"
                     alt=""
@@ -32,7 +32,7 @@ export function HowItWorks() {
 
             {/* Text box */}
             <MotionWrapper variants={fadeRight}>
-                <div className="relative z-20 bg-[#0F172A] text-white rounded-2xl p-10 w-[560px] -ml-15">
+                <div className="relative z-20 bg-[#0F172A] text-white rounded-2xl p-10 max-w-[560px] ml-[-60px]">
                 <h3 className="text-[31px] font-semibold leading-[36px] mb-4">
                     O cliente aproxima o telemóvel.
                     <br />

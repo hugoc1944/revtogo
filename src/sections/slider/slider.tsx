@@ -74,7 +74,7 @@ export function ConceptSlider() {
       : 0;
 
   return (
-    <section ref={sectionRef} className="bg-bg pt-20 md:pt-30">
+    <section className="bg-bg pt-10 md:pt-22 overflow-x-hidden">
       {/* ================= DESKTOP ================= */}
       <div className="hidden md:block">
         <div className="mx-auto max-w-[1400px] px-2">
@@ -85,8 +85,8 @@ export function ConceptSlider() {
           {/* Slider */}
           <div className="relative flex justify-center">
             <div
-              className="overflow-hidden"
-              style={{ width: VIEWPORT_WIDTH }}
+              className="overflow-hidden max-w-full"
+              style={{ width: Math.min(VIEWPORT_WIDTH, 1400) }}
             >
               <div
                 className="flex transition-transform duration-500 ease-out"
@@ -183,7 +183,7 @@ export function ConceptSlider() {
           <div className="relative">
             <div
               className="overflow-hidden"
-              style={{ width: MOBILE_VIEWPORT_WIDTH }}
+              style={{ width: "100%" }}
             >
               <div
                 className="flex transition-transform duration-500 ease-out"

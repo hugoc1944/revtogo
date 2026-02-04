@@ -80,7 +80,7 @@ export function ProductGallery() {
               width: VISIBLE * THUMB_WIDTH + (VISIBLE - 1) * GAP
             }}
           >
-            <div
+              <div
               className="flex transition-transform duration-300 ease-out"
               style={{
                 gap: GAP,

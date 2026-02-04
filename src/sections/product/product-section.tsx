@@ -5,7 +5,7 @@ import { ProductInfo } from "./product-info";
 
 export function ProductSection() {
   return (
-    <section className="bg-bg pt-6 md:pt-15 pb-4 md:pb-15">
+    <section className="bg-bg pt-6 md:pt-15 pb-4 md:pb-15 overflow-x-hidden">
       <div className="mx-auto max-w-7xl px-3 md:px-4">
         <div className="grid gap-4 md:gap-10 md:grid-cols-[52%_48%]">
           <ProductGallery />
