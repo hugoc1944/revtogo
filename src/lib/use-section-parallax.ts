@@ -24,8 +24,8 @@ export function useSectionParallax(
           (rect.top + rect.height / 2 - vh / 2) / vh;
 
         const offset = Math.max(
-          -15,
-          Math.min(15, progress * -30)
+          -20,
+          Math.min(20, progress * -40)
         );
 
         el.style.setProperty("--parallax-y", `${offset}px`);

@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/* =========================
+   ENUMS
+   ========================= */
+
+enum DesignStyle {
+  solid
+  art
+}
+
+enum DeliveryMethod {
+  email
+  whatsapp
+}
+
+enum RequestStatus {
+  pending
+  sent
+  approved
+  rejected
+}
+
+/* =========================
+   MODELS
+   ========================= */
+
+model DesignRequest {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status RequestStatus @default(pending)
+
+  // Business
+  businessName  String
+  googlePlaceId String?
+  businessCity  String?
+
+  // Contact
+  contactName  String
+  contactEmail String
+  contactPhone String?
+
+  // Design
+  designStyle DesignStyle
+
+  // Delivery
+  deliveryMethod DeliveryMethod
+
+  // Notes
+  notes String?
+
+  // Meta
+  source String @default("landing")
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([contactEmail])
+}

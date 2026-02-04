@@ -1,30 +1,34 @@
 "use client";
 
 import Image from "next/image";
-import { InputHTMLAttributes, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import clsx from "clsx";
 import { useGooglePlaces } from "@/lib/use-google-places";
 
 type SelectedBusiness = {
   name: string;
-  placeId?: string;
+  placeId: string;
+  formattedAddress?: string;
 };
 
 type BusinessInputProps = {
-  label?: string;
-  hint?: string;
-  onSelect?: (business: SelectedBusiness) => void;
-} & InputHTMLAttributes<HTMLInputElement>;
+  defaultValue?: string;
+  onBusinessSelect: (business: SelectedBusiness) => void;
+};
 
 export function BusinessInput({
-  label = "Procure pelo nome do seu negócio 👇",
-  hint = "Não consegue encontrar o seu negócio? Sem problemas. Digite o nome e cidade.",
-  onSelect,
-  className,
-  ...props
+  defaultValue,
+  onBusinessSelect,
 }: BusinessInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const googleReady = useGooglePlaces();
+
+  // Prefill ONLY once (important)
+  useEffect(() => {
+    if (inputRef.current && defaultValue) {
+      inputRef.current.value = defaultValue;
+    }
+  }, [defaultValue]);
 
   useEffect(() => {
     if (!googleReady || !inputRef.current || !window.google) return;
@@ -33,26 +37,38 @@ export function BusinessInput({
       inputRef.current,
       {
         types: ["establishment"],
-        fields: ["name", "place_id"],
+        fields: ["name", "place_id", "formatted_address"],
       }
     );
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
 
-      if (!place?.name) return;
+      if (!place?.name || !place.place_id) return;
 
-      onSelect?.({
+      const label = place.formatted_address
+        ? `${place.name}, ${place.formatted_address}`
+        : place.name;
+
+      // Force the visible value
+      inputRef.current!.value = label;
+
+      onBusinessSelect({
         name: place.name,
         placeId: place.place_id,
+        formattedAddress: place.formatted_address,
       });
     });
-  }, [googleReady, onSelect]);
+
+    return () => {
+      window.google.maps.event.clearInstanceListeners(autocomplete);
+    };
+  }, [googleReady, onBusinessSelect]);
 
   return (
-    <div className="w-full rounded-xl bg-surface p-4 md:p-6">
-      <p className="mb-3 font-medium text-ink text-body-mobile md:text-body-desktop">
-        {label}
+    <div className="w-full rounded-xl bg-surface p-4">
+      <p className="mb-3 font-medium text-ink">
+        Procure pelo nome do seu negócio 👇
       </p>
 
       <div className="relative">
@@ -68,20 +84,18 @@ export function BusinessInput({
         <input
           ref={inputRef}
           type="text"
+          placeholder="Comece a escrever e selecione da lista"
           className={clsx(
             "w-full rounded-[10px] border border-neutral-300 bg-bg",
             "pl-11 pr-3 py-2.5",
-            "text-body-mobile md:text-body-desktop text-ink",
-            "placeholder:text-muted",
-            "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-            className
+            "text-ink placeholder:text-muted",
+            "focus:outline-none focus:ring-2 focus:ring-primary"
           )}
-          {...props}
         />
       </div>
 
-      <p className="mt-2 text-[11px] leading-[20px] text-muted">
-        *{hint}
+      <p className="mt-2 text-[11px] text-muted">
+        *Selecione o negócio a partir dos resultados do Google
       </p>
     </div>
   );

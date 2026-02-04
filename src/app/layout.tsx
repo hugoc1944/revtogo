@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
+import { DesignRequestOverlay } from "@/components/design-request/design-request-overlay";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="pt">
       <body className={`${inter.variable} bg-bg text-ink antialiased`}>
         {children}
+         <DesignRequestOverlay />
       </body>
     </html>
   );

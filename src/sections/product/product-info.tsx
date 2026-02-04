@@ -1,8 +1,12 @@
 import Image from "next/image";
 import { Accordion } from "@/components/accordion";
 import { BusinessInput } from "@/components/business-input";
+import { useDesignRequestStore } from "@/stores/design-request.store";
 
 export function ProductInfo() {
+  const openDesignRequest = useDesignRequestStore((s) => s.open);
+  const { data, update } = useDesignRequestStore();
+  
   return (
     <div className="flex flex-col gap-5 md:gap-6 px-1">
       {/* ===== TITLE ===== */}
@@ -84,11 +88,27 @@ export function ProductInfo() {
 
 
       {/* ===== GOOGLE INPUT ===== */}
-      <BusinessInput placeholder="Escreva o nome do seu negócio aqui..." />
+      <BusinessInput
+        defaultValue={data.businessLabel}
+        onBusinessSelect={(business) => {
+          const label = business.formattedAddress
+            ? `${business.name}, ${business.formattedAddress}`
+            : business.name;
+
+          update({
+            businessName: business.name,
+            businessLabel: label,
+            googlePlaceId: business.placeId,
+          });
+        }}
+      />
+
+
 
       {/* ===== CTA ===== */}
       <div>
         <button
+          onClick={openDesignRequest}
           className="
             w-full
             bg-primary
