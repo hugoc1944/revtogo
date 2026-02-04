@@ -39,26 +39,18 @@ model DesignRequest {
 
   status RequestStatus @default(pending)
 
-  // Business
   businessName  String
   googlePlaceId String?
   businessCity  String?
 
-  // Contact
   contactName  String
   contactEmail String
   contactPhone String?
 
-  // Design
   designStyle DesignStyle
-
-  // Delivery
   deliveryMethod DeliveryMethod
 
-  // Notes
   notes String?
-
-  // Meta
   source String @default("landing")
 
   @@index([createdAt])
