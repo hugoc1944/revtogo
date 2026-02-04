@@ -67,7 +67,7 @@ export function StepContact() {
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1">
           <label className="text-[13px] font-medium text-ink">
-            Primeiro nome
+            Primeiro nome*
           </label>
           <input
             type="text"
@@ -93,7 +93,7 @@ export function StepContact() {
 
         <div className="flex flex-col gap-1">
           <label className="text-[13px] font-medium text-ink">
-            Apelido
+            Apelido*
           </label>
           <input
             type="text"
@@ -121,7 +121,7 @@ export function StepContact() {
       {/* Email */}
       <div className="flex flex-col gap-1">
         <label className="text-[13px] font-medium text-ink">
-          Email
+          Email*
         </label>
         <input
           type="email"
