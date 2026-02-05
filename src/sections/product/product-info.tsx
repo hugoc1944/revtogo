@@ -15,7 +15,7 @@ export function ProductInfo() {
           Placa Revtogo+
         </h2>
         <p className="text-[16px] font-semibold text-ink/80 -mt-1">
-          Placa de avaliações Google com aproximação + QR code.
+          Placa de avaliações no Google com Aproximação + QR code.
         </p>
       </div>
 
@@ -142,9 +142,9 @@ export function ProductInfo() {
             title: "Como funciona",
             content: (
               <>
-                O cliente aproxima o telemóvel da placa e é
-                redirecionado diretamente para a página de
-                avaliação do Google.
+                Recebe a placa, coloca-a no seu estabelecimento e começa a utilizá-la de imediato.
+                <br /><br />
+                O cliente aproxima o telemóvel da placa e é redirecionado diretamente para a página de avaliação do Google, onde pode deixar a sua opinião de forma simples e imediata.
               </>
             ),
           },
@@ -153,8 +153,9 @@ export function ProductInfo() {
             title: "Garantia de satisfação (30 dias)",
             content: (
               <>
-                Se não ficar satisfeito, pode devolver a placa
-                no prazo de 30 dias.
+                Se não ficar satisfeito com a placa, pode devolvê-la no prazo de 30 dias.
+                <br /><br />
+                O processo é simples e sem custos, com reembolso total.
               </>
             ),
           },
@@ -163,8 +164,9 @@ export function ProductInfo() {
             title: "Entrega Nacional",
             content: (
               <>
-                Entregamos em todo o território nacional com
-                envio rápido e seguro.
+                Após a produção da sua placa, o envio é feito através dos CTT Expresso.
+                <br /><br />
+                Entregamos em todo o território nacional, incluindo continente e ilhas, com envio <strong>gratuito</strong>, rápido e seguro.
               </>
             ),
           },
@@ -173,13 +175,23 @@ export function ProductInfo() {
             title: "Detalhes do produto",
             content: (
               <>
-                Placa em acrílico premium com NFC e QR Code,
-                pronta a usar.
+                • Placa em acrílico PMMA transparente
+                <br />
+                • Dimensões: 14 × 14 cm
+                <br />
+                • Espessura: 6 mm
+                <br />
+                • NFC integrado e QR code
+                <br />
+                • Preparada e produzida em Portugal
+                <br /><br />
+                <em>Nota: superfícies metálicas podem interferir com a funcionalidade do NFC.</em>
               </>
             ),
           },
         ]}
       />
+
     </div>
   );
 }

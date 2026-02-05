@@ -171,8 +171,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/politica-de-reembolsos" className="hover:text-white">
-                  Política de Reembolsos
+                <Link href="/politica-de-reembolso" className="hover:text-white">
+                  Política de Reembolso
                 </Link>
               </li>
             </ul>

@@ -13,7 +13,7 @@ const ROWS = [
     generic: "Configuração manual necessária",
   },
   {
-    revtogo: "Acabamento premium e qualidade superior",
+    revtogo: "Acabamento premium e atenção ao detalhe",
     generic: "Acabamento standard",
   },
   {
@@ -21,7 +21,7 @@ const ROWS = [
     generic: "Pagamento antes de ver o resultado",
   },
   {
-    revtogo: "Suporte e reparações gratuitas",
+    revtogo: "Suporte dedicado e reparações incluídas",
     generic: "Sem suporte",
   },
   {

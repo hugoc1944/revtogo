@@ -37,7 +37,7 @@ const ITEMS = [
     text: (
       <>
         <span className="font-semibold">
-          Deixe os seus clientes reais
+          Deixe os seus clientes
         </span>{" "}
         falarem por si!
       </>

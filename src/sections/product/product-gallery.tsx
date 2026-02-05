@@ -42,7 +42,7 @@ export function ProductGallery() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => canPrev && setStart((s) => s - 1)}
-              className={clsx("text-lg", !canPrev && "opacity-30")}
+              className={clsx("text-[32px]", !canPrev && "opacity-30")}
             >
               ‹
             </button>
@@ -82,7 +82,7 @@ export function ProductGallery() {
 
             <button
               onClick={() => canNextMobile && setStart((s) => s + 1)}
-              className={clsx("text-lg", !canNextMobile && "opacity-30")}
+              className={clsx("text-[32px]", !canNextMobile && "opacity-30")}
             >
               ›
             </button>
@@ -110,7 +110,7 @@ export function ProductGallery() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => canPrev && setStart((s) => s - 1)}
-                className={clsx("text-lg", !canPrev && "opacity-30")}
+                className={clsx("text-[32px]", !canPrev && "opacity-30")}
               >
                 ‹
               </button>
@@ -150,7 +150,7 @@ export function ProductGallery() {
 
               <button
                 onClick={() => canNextDesktop && setStart((s) => s + 1)}
-                className={clsx("text-lg", !canNextDesktop && "opacity-30")}
+                className={clsx("text-[32px]", !canNextDesktop && "opacity-30")}
               >
                 ›
               </button>

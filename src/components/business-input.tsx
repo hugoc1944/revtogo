@@ -1,32 +1,36 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { useGooglePlaces } from "@/lib/use-google-places";
 
 type SelectedBusiness = {
   name: string;
-  placeId: string;
+  placeId?: string;
   formattedAddress?: string;
 };
 
 type BusinessInputProps = {
   defaultValue?: string;
   onBusinessSelect: (business: SelectedBusiness) => void;
+  onManualConfirm?: (value: string) => void;
 };
 
 export function BusinessInput({
   defaultValue,
   onBusinessSelect,
+  onManualConfirm,
 }: BusinessInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const googleReady = useGooglePlaces();
+  const [hasSelectedFromGoogle, setHasSelectedFromGoogle] = useState(false);
 
-  // Prefill ONLY once (important)
+  // Prefill once
   useEffect(() => {
     if (inputRef.current && defaultValue) {
       inputRef.current.value = defaultValue;
+      setHasSelectedFromGoogle(true);
     }
   }, [defaultValue]);
 
@@ -43,15 +47,14 @@ export function BusinessInput({
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
-
-      if (!place?.name || !place.place_id) return;
+      if (!place?.name) return;
 
       const label = place.formatted_address
         ? `${place.name}, ${place.formatted_address}`
         : place.name;
 
-      // Force the visible value
       inputRef.current!.value = label;
+      setHasSelectedFromGoogle(true);
 
       onBusinessSelect({
         name: place.name,
@@ -68,7 +71,7 @@ export function BusinessInput({
   return (
     <div className="w-full rounded-xl bg-surface p-4">
       <p className="mb-3 font-medium text-ink">
-        Procure pelo nome do seu negócio 👇
+        Procure o nome do seu negócio 👇
       </p>
 
       <div className="relative">
@@ -84,7 +87,11 @@ export function BusinessInput({
         <input
           ref={inputRef}
           type="text"
-          placeholder="Comece a escrever e selecione da lista"
+          placeholder="Escreva aqui e selecione da lista…"
+          onChange={(e) => {
+            setHasSelectedFromGoogle(false);
+            onManualConfirm?.(e.target.value);
+          }}
           className={clsx(
             "w-full rounded-[10px] border border-neutral-300 bg-bg",
             "pl-11 pr-3 py-2.5",
@@ -94,9 +101,11 @@ export function BusinessInput({
         />
       </div>
 
-      <p className="mt-2 text-[11px] text-muted">
-        *Selecione o negócio a partir dos resultados do Google
-      </p>
+      {!hasSelectedFromGoogle && (
+        <p className="mt-2 text-[12px] text-muted">
+          Não encontra o seu negócio? Sem problema, escreva o nome e a cidade.
+        </p>
+      )}
     </div>
   );
 }

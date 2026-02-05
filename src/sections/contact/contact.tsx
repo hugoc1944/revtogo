@@ -23,8 +23,13 @@ export function ContactSection() {
                 Fale connosco
               </h1>
 
-              <p className="text-[16px] text-ink/80 leading-relaxed mb-3 md:mb-8">
-                Tem alguma dúvida, pedido especial ou precisa de várias placas?
+              <p className="text-[16px] text-ink/80 leading-relaxed mb-4">
+                Tem alguma dúvida, um pedido específico ou precisa de várias
+                placas para o seu negócio?
+              </p>
+
+              <p className="text-[16px] text-ink/80 leading-relaxed mb-6">
+                Estamos disponíveis para ajudar e esclarecer qualquer questão.
               </p>
 
               {/* ===== CONTACT DETAILS ===== */}
@@ -59,16 +64,21 @@ export function ContactSection() {
                   <p className="text-[13px] uppercase tracking-wide text-muted mb-1">
                     Telefone
                   </p>
-                  <a
-                    href="tel:+351928347379"
-                    className="text-[16px] font-semibold text-ink hover:text-primary transition-colors"
-                  >
-                    +351 928 347 379
-                  </a>
+                  <div className="flex items-baseline gap-2">
+                    <a
+                      href="tel:+351928347379"
+                      className="text-[16px] font-semibold text-ink hover:text-primary transition-colors"
+                    >
+                      +351 928 347 379
+                    </a>
+                    <span className="text-[13px] text-ink/60">
+                      (chamada para rede móvel nacional)
+                    </span>
+                  </div>
                 </div>
 
                 {/* Social icons */}
-                <div className="flex items-center gap-4 pt-2">
+                <div className="flex items-center gap-4 pt-1 pb-6">
                   <a
                     href="https://www.instagram.com/revtogopt"
                     target="_blank"
@@ -76,10 +86,10 @@ export function ContactSection() {
                     className="opacity-70 hover:opacity-100 transition-opacity"
                   >
                     <Image
-                      src="/icons/ig.png"
+                      src="/icons/icon1_dark.png"
                       alt="Instagram"
-                      width={20}
-                      height={20}
+                      width={32}
+                      height={32}
                     />
                   </a>
 
@@ -90,10 +100,10 @@ export function ContactSection() {
                     className="opacity-70 hover:opacity-100 transition-opacity"
                   >
                     <Image
-                      src="/icons/fb.png"
+                      src="/icons/icon2_dark.png"
                       alt="Facebook"
-                      width={20}
-                      height={20}
+                      width={32}
+                      height={32}
                     />
                   </a>
                 </div>

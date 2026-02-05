@@ -1,9 +1,40 @@
-"use client";
-
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Header } from "@/sections/header";
 import { Footer } from "@/sections/footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sobre a Revtogo | Menos fricção, mais avaliações reais",
+  description:
+    "Conheça a Revtogo: a marca por trás da placa de avaliações Google por aproximação. Design, tecnologia invisível e foco na experiência do cliente.",
+
+  alternates: {
+    canonical: "https://revtogo.pt/sobre-nos",
+  },
+
+  openGraph: {
+    title: "Sobre a Revtogo | Menos fricção, mais avaliações reais",
+    description:
+      "A Revtogo nasceu para tornar as avaliações no Google um gesto natural, imediato e sem fricção.",
+    url: "https://revtogo.pt/sobre-nos",
+    siteName: "Revtogo",
+    locale: "pt_PT",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary",
+    title: "Sobre a Revtogo",
+    description:
+      "Design, tecnologia de aproximação e foco na experiência para gerar avaliações reais.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function AboutPage() {
   return (
@@ -84,8 +115,7 @@ export default function AboutPage() {
 
               <p className="text-[16px] md:text-[17px] text-surface/80 leading-relaxed mb-4">
                 A placa Revtogo integra tecnologia de aproximação (NFC) e QR
-                Code. O cliente aproxima o telemóvel ou lê o código e uma janela para
-                abrir a avaliação aparece instantaneamente.
+                Code. O cliente aproxima o telemóvel ou lê o código e a página de avaliação abre de forma imediata.
               </p>
 
               <p className="text-[16px] md:text-[17px] text-surface/80 leading-relaxed">
@@ -109,8 +139,7 @@ export default function AboutPage() {
 
               <p className="text-[16px] md:text-[17px] text-surface/80 leading-relaxed">
                 Para além da funcionalidade, acreditamos que a forma como a
-                solução se apresenta influencia diretamente a experiência do
-                cliente. Cada placa é desenhada para refletir a identidade do
+                solução se apresenta influencia diretamente a experiência. Cada placa é desenhada para refletir a identidade do
                 seu negócio, reforçando confiança e qualidade.
               </p>
             </div>
@@ -127,8 +156,8 @@ export default function AboutPage() {
 
               <p className="text-[16px] md:text-[17px] text-surface/80 leading-relaxed mb-4">
                 A nossa placa não é apenas uma placa. É um objeto físico
-                cuidadosamente produzido, desde o acrílico premium ao
-                acabamento manual dos cantos.
+                cuidadosamente produzido, pensado ao detalhe, desde o acrílico premium ao
+                acabamento 100% manual dos cantos.
               </p>
 
               <p className="text-[16px] md:text-[17px] text-surface/80 leading-relaxed">
@@ -158,8 +187,7 @@ export default function AboutPage() {
                   Webtogo.pt
                 </Link>
                 , especializada em soluções digitais e experiência do
-                utilizador. Aplicamos tecnologia, design e comportamento humano
-                para criar produtos eficazes e duradouros.
+                utilizador. Aplicamos tecnologia, design e comportamento humano para criar produtos claros, eficazes e duradouros.
               </p>
             </div>
           </div>

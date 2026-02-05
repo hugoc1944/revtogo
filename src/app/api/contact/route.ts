@@ -1,15 +1,39 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-/* 👇 THIS IS THE FIX */
+/* 👇 REQUIRED FOR PRISMA */
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { firstName, lastName, email, message } = body;
+    const {
+      firstName,
+      lastName,
+      email,
+      message,
+      company,     // honeypot
+      startedAt,   // timing
+    } = body;
 
+    /* 🐝 Honeypot check (bots fill hidden fields) */
+    if (company) {
+      return NextResponse.json(
+        { error: "Spam detected" },
+        { status: 400 }
+      );
+    }
+
+    /* ⏱ Time-based check (bots submit too fast) */
+    if (!startedAt || Date.now() - startedAt < 5000) {
+      return NextResponse.json(
+        { error: "Submission too fast" },
+        { status: 400 }
+      );
+    }
+
+    /* ✅ Required fields */
     if (!firstName || !lastName || !email || !message) {
       return NextResponse.json(
         { error: "Missing fields" },

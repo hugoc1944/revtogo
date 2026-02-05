@@ -7,7 +7,7 @@ export const SLIDES = [
     image: "/slider/C1_presence.png",
     hoverTitle: "Presença e confiança",
     hoverText:
-      "Uma placa física transmite credibilidade e profissionalismo no espaço.",
+      "Uma placa física comunica legitimidade e atenção ao detalhe no espaço.",
   },
   {
     id: "identity",
@@ -17,7 +17,7 @@ export const SLIDES = [
     image: "/slider/C2_identity.png",
     hoverTitle: "Identidade",
     hoverText:
-      "Cada detalhe é pensado para refletir a identidade do seu negócio.",
+      "Cada detalhe é definido para respeitar e representar a sua marca.",
   },
   {
     id: "simplicity",
@@ -27,7 +27,7 @@ export const SLIDES = [
     image: "/slider/C3_simplicity.png",
     hoverTitle: "Simplicidade",
     hoverText:
-      "Sem apps, sem passos extra. Um gesto natural no momento certo.",
+      "Sem apps, sem passos extra. Um gesto simples, no momento certo.",
   },
   {
     id: "daily",
@@ -37,6 +37,6 @@ export const SLIDES = [
     image: "/slider/C4_daily.png",
     hoverTitle: "Consistência",
     hoverText:
-      "Funciona continuamente no dia a dia do espaço.",
+      "Presente no espaço, funciona naturalmente no dia a dia.",
   },
 ];

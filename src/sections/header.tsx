@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import clsx from "clsx";
 import { usePathname, useRouter } from "next/navigation";
+import { useDesignRequestStore } from "@/stores/design-request.store";
 
 type HeaderVariant = "dark" | "light";
 
@@ -12,6 +13,11 @@ const PRIMARY_NAV = [
   { label: "Como Funciona", target: "como-funciona" },
   { label: "Sobre Nós", href: "/sobre-nos" },
   { label: "Contactos", href: "/contactos" },
+];
+
+const MOBILE_SECONDARY_NAV = [
+  { label: "Questões frequentes", target: "faq" },
+  { label: "Pedir design da minha placa", action: "design" },
 ];
 
 type HeaderProps = {
@@ -24,6 +30,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
 
   const pathname = usePathname();
   const router = useRouter();
+  const openDesignRequest = useDesignRequestStore((s) => s.open);
 
   const scrollToTarget = (id: string) => {
     const el = document.getElementById(id);
@@ -38,19 +45,37 @@ export function Header({ variant = "dark" }: HeaderProps) {
   const handleScrollNav = (targetId: string) => {
     setOpen(false);
 
-    // Already on homepage → just scroll
     if (pathname === "/") {
       requestAnimationFrame(() => scrollToTarget(targetId));
       return;
     }
 
-    // Navigate home first, then scroll
     router.push("/");
 
-    // Wait for page + layout to mount
     setTimeout(() => {
       scrollToTarget(targetId);
     }, 450);
+  };
+
+  const handleDesignRequest = () => {
+    setOpen(false);
+
+    if (pathname === "/") {
+      scrollToTarget("revtogo-plus");
+      setTimeout(() => {
+        openDesignRequest();
+      }, 900);
+      return;
+    }
+
+    router.push("/");
+
+    setTimeout(() => {
+      scrollToTarget("revtogo-plus");
+      setTimeout(() => {
+        openDesignRequest();
+      }, 700);
+    }, 500);
   };
 
   return (
@@ -131,6 +156,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
         )}
       >
         <div className="min-h-dvh bg-surface px-6 pt-6 pb-8 flex flex-col">
+          {/* Top */}
           <div className="flex items-center justify-between mb-10">
             <Image
               src="/brand/Revtogo.png"
@@ -148,6 +174,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
             </button>
           </div>
 
+          {/* Primary nav */}
           <nav className="space-y-7">
             {PRIMARY_NAV.map((item) =>
               item.target ? (
@@ -172,6 +199,43 @@ export function Header({ variant = "dark" }: HeaderProps) {
               )
             )}
           </nav>
+
+          {/* Secondary nav — bottom */}
+          <div className="mt-auto pt-10 border-t border-ink/10">
+            <nav className="space-y-4">
+              {MOBILE_SECONDARY_NAV.map((item) =>
+                item.action === "design" ? (
+                  <button
+                    key={item.label}
+                    onClick={handleDesignRequest}
+                    className="
+                      block
+                      text-[15px]
+                      text-ink/60
+                      hover:text-primary
+                      transition
+                    "
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <button
+                    key={item.label}
+                    onClick={() => handleScrollNav(item.target!)}
+                    className="
+                      block
+                      text-[15px]
+                      text-ink/60
+                      hover:text-primary
+                      transition
+                    "
+                  >
+                    {item.label}
+                  </button>
+                )
+              )}
+            </nav>
+          </div>
         </div>
       </div>
     </>

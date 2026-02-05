@@ -11,9 +11,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Revtogo – Mais avaliações no Google, sem fricção",
+  title: {
+    default: "Revtogo",
+    template: "Revtogo | %s",
+  },
   description:
-    "Placa premium com NFC e QR code pensada para tornar a avaliação no Google um gesto natural no seu espaço.",
+    "Placas com aproximação e QR code para recolher avaliações no Google de forma simples e natural.",
 };
 
 export default function RootLayout({

@@ -4,7 +4,7 @@ export function GuaranteeSupportSection() {
   return (
     <section className="bg-surface py-10 md:py-15">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="grid gap-6 md:gap-2 md:grid-cols-2 md:items-center">
+        <div className="grid gap-6 md:gap-4 md:grid-cols-2 md:items-center">
           {/* ===== LEFT COLUMN (ITEMS) ===== */}
           <div className="flex flex-col gap-8 order-2 md:order-1">
             {/* Item 1 */}
@@ -20,7 +20,7 @@ export function GuaranteeSupportSection() {
                 />
 
                 <h4 className="text-[21px] font-semibold text-ink">
-                  Garantia de satisfação 30 dias e Suporte
+                  Garantia de satisfação (30 dias) e Suporte
                 </h4>
               </div>
 
@@ -53,8 +53,7 @@ export function GuaranteeSupportSection() {
 
               {/* Description */}
               <p className="ml-[38px] text-[16px] text-ink/80 leading-relaxed">
-                Concebida e produzida em <strong>Portugal</strong>, com controlo
-                de qualidade.
+                Desenvolvida e produzida em <strong>Portugal</strong>, com controlo de qualidade em todas as etapas.
               </p>
             </div>
           </div>
@@ -62,9 +61,9 @@ export function GuaranteeSupportSection() {
           {/* ===== RIGHT COLUMN (TITLE) ===== */}
           <div className="order-1 md:order-2">
             <h3 className="text-[28px] text-center md:text-left md:text-[36px] font-bold text-ink leading-tight ">
-              Qualidade, suporte e confiança
+              Qualidade, suporte e confiança.
               <br />
-              <span className="text-primary">Uma decisão segura</span>
+              <span className="text-primary">Uma decisão segura.</span>
             </h3>
           </div>
         </div>

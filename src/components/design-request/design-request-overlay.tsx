@@ -58,7 +58,7 @@ export function DesignRequestOverlay() {
             <div className="h-[3px] w-full bg-primary/80" />
 
             {/* Header */}
-            <div className="px-6 pt-6 pb-4">
+            <div className="px-6 pt-8 pb-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-[12px] font-medium text-muted uppercase tracking-wide">

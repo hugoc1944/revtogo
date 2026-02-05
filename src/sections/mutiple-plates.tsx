@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export function MultiplePlatesSection() {
+  const router = useRouter();
+
   return (
     <section className="bg-bg pt-10 md:pt-25 pb-20 md:pb-24">
       <div className="mx-auto max-w-3xl px-4 text-center">
@@ -21,6 +25,7 @@ export function MultiplePlatesSection() {
 
         {/* ===== CTA ===== */}
         <button
+          onClick={() => router.push("/contactos")}
           className="
             inline-flex
             items-center

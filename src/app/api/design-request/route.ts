@@ -7,6 +7,10 @@ import { z } from "zod";
    ========================= */
 
 const DesignRequestSchema = z.object({
+  // Anti-spam
+  company: z.string().optional(),
+  startedAt: z.number(),
+
   // Business
   businessName: z.string().min(1),
   googlePlaceId: z.string().optional(),
@@ -18,13 +22,9 @@ const DesignRequestSchema = z.object({
   contactEmail: z.string().email(),
   contactPhone: z.string().optional(),
 
-  designStyle: z.enum(["solid", "art"]).refine(Boolean, {
-    message: "Design style is required",
-    }),
-  deliveryMethod: z.enum(["email", "whatsapp"]).refine(Boolean, {
-    message: "Delivery method is required",
-  }),
-
+  // Design / Delivery
+  designStyle: z.enum(["solid", "art"]),
+  deliveryMethod: z.enum(["email", "whatsapp"]),
 
   // Notes
   notes: z.string().max(500).optional(),
@@ -37,6 +37,22 @@ const DesignRequestSchema = z.object({
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+
+    /* 🐝 Honeypot check */
+    if (body.company) {
+      return NextResponse.json(
+        { error: "Spam detected" },
+        { status: 400 }
+      );
+    }
+
+    /* ⏱ Time-based protection (min 5s) */
+    if (!body.startedAt || Date.now() - body.startedAt < 5000) {
+      return NextResponse.json(
+        { error: "Submission too fast" },
+        { status: 400 }
+      );
+    }
 
     const data = DesignRequestSchema.parse(body);
 
