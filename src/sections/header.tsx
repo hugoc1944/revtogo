@@ -3,94 +3,134 @@
 import Image from "next/image";
 import { useState } from "react";
 import clsx from "clsx";
+import { usePathname, useRouter } from "next/navigation";
+
+type HeaderVariant = "dark" | "light";
 
 const PRIMARY_NAV = [
-  { label: "A Placa", href: "#placa" },
-  { label: "Sobre Nós", href: "#sobre" },
-  { label: "Como Funciona", href: "#como-funciona" },
-  { label: "Contactos", href: "#como-funciona" },
+  { label: "A Placa", target: "revtogo-plus" },
+  { label: "Como Funciona", target: "como-funciona" },
+  { label: "Sobre Nós", href: "/sobre-nos" },
+  { label: "Contactos", href: "/contactos" },
 ];
 
-const SECONDARY_NAV = [
-  { label: "Acesso Antecipado", href: "#acesso-antecipado" },
-  { label: "O nosso propósito", href: "#proposito" },
-];
+type HeaderProps = {
+  variant?: HeaderVariant;
+};
 
-export function Header() {
+export function Header({ variant = "dark" }: HeaderProps) {
   const [open, setOpen] = useState(false);
+  const isLight = variant === "light";
+
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const scrollToTarget = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  const handleScrollNav = (targetId: string) => {
+    setOpen(false);
+
+    // Already on homepage → just scroll
+    if (pathname === "/") {
+      requestAnimationFrame(() => scrollToTarget(targetId));
+      return;
+    }
+
+    // Navigate home first, then scroll
+    router.push("/");
+
+    // Wait for page + layout to mount
+    setTimeout(() => {
+      scrollToTarget(targetId);
+    }, 450);
+  };
 
   return (
     <>
-      {/* Header bar */}
-      <header
-        className={clsx(
-          "absolute top-0 left-0 right-0 z-40 transition-opacity",
-          open && "absolute top-0 left-0 right-0 z-40"
-        )}
-      >        
-      <div className="mx-auto max-w-7xl px-4 py-6 flex items-center">
-        {/* Logo (left) */}
-        <div className="flex items-center">
-          <Image
-            src="/brand/Revtogo.png"
-            alt="Revtogo"
-            width={150}
-            height={32}
-            priority
-          />
-        </div>
-
-        {/* Desktop nav — visually centered */}
-        <nav className="hidden md:flex flex-1 justify-center gap-15 text-[18px]  text-ink">
-          {PRIMARY_NAV.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="hover:text-primary transition-colors"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* Mobile burger (right) */}
-        <button
-          aria-label="Toggle menu"
-          onClick={() => setOpen((v) => !v)}
-          className={clsx(
-            "md:hidden ml-auto h-10 w-10 rounded-full border border-neutral-300 flex items-center justify-center transition-colors",
-            open && "bg-black/30"
-          )}
-        >
-          {/* Burger / Close */}
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+      {/* ===== HEADER BAR ===== */}
+      <header className="absolute top-0 left-0 right-0 z-40">
+        <div className="mx-auto max-w-7xl px-4 py-6 flex items-center">
+          {/* Logo */}
+          <button
+            onClick={() => router.push("/")}
+            aria-label="Home"
+            className="cursor-pointer"
           >
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
+            <Image
+              src={
+                isLight
+                  ? "/brand/Revtogo_White.png"
+                  : "/brand/Revtogo.png"
+              }
+              alt="Revtogo"
+              width={150}
+              height={32}
+              priority
+            />
+          </button>
 
-        </button>
+          {/* Desktop nav */}
+          <nav
+            className={clsx(
+              "hidden md:flex flex-1 justify-center gap-15 text-[18px]",
+              isLight ? "text-surface" : "text-ink"
+            )}
+          >
+            {PRIMARY_NAV.map((item) =>
+              item.target ? (
+                <button
+                  key={item.label}
+                  onClick={() => handleScrollNav(item.target)}
+                  className="hover:text-primary transition cursor-pointer"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <button
+                  key={item.label}
+                  onClick={() => router.push(item.href!)}
+                  className="hover:text-primary transition cursor-pointer"
+                >
+                  {item.label}
+                </button>
+              )
+            )}
+          </nav>
+
+          {/* Mobile burger */}
+          <button
+            aria-label="Toggle menu"
+            onClick={() => setOpen((v) => !v)}
+            className={clsx(
+              "md:hidden ml-auto h-10 w-10 rounded-full flex items-center justify-center",
+              isLight
+                ? "border border-surface/40 text-surface"
+                : "border border-neutral-300 text-ink"
+            )}
+          >
+            ☰
+          </button>
         </div>
       </header>
 
-      {/* Mobile dropdown menu */}
-      {/* Mobile full-screen dropdown */}
+      {/* ===== MOBILE MENU ===== */}
       <div
         className={clsx(
-          "md:hidden fixed inset-0 z-50 transition-all duration-500 ease-out",
+          "md:hidden fixed inset-0 z-50 transition-all duration-300",
           open
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-4 pointer-events-none"
-        )}>
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
         <div className="min-h-dvh bg-surface px-6 pt-6 pb-8 flex flex-col">
-          {/* Top bar */}
           <div className="flex items-center justify-between mb-10">
             <Image
               src="/brand/Revtogo.png"
@@ -103,57 +143,37 @@ export function Header() {
             <button
               aria-label="Close menu"
               onClick={() => setOpen(false)}
-              className="h-10 w-10 rounded-full border border-neutral-300 flex items-center justify-center"
             >
-              {/* Close icon */}
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+              ✕
             </button>
           </div>
 
-          {/* Primary navigation */}
           <nav className="space-y-7">
-            {PRIMARY_NAV.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="block text-[22px] font-medium text-ink"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Push secondary links to bottom */}
-          <div className="mt-auto pt-10">
-            <div className="h-px bg-neutral-300/60 mb-6" />
-
-            <nav className="space-y-4">
-              {SECONDARY_NAV.map((item) => (
-                <a
+            {PRIMARY_NAV.map((item) =>
+              item.target ? (
+                <button
                   key={item.label}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block text-[14px] font-medium text-muted"
+                  onClick={() => handleScrollNav(item.target)}
+                  className="block text-[22px] font-medium text-ink"
                 >
                   {item.label}
-                </a>
-              ))}
-            </nav>
-          </div>
+                </button>
+              ) : (
+                <button
+                  key={item.label}
+                  onClick={() => {
+                    setOpen(false);
+                    router.push(item.href!);
+                  }}
+                  className="block text-[22px] font-medium text-ink"
+                >
+                  {item.label}
+                </button>
+              )
+            )}
+          </nav>
         </div>
       </div>
-
     </>
   );
 }

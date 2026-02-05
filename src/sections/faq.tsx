@@ -4,7 +4,7 @@ import { Accordion } from "@/components/accordion";
 
 export function FAQSection() {
   return (
-    <section className="bg-bg pt-10 md:pt-17">
+    <section id="faq" className="bg-bg pt-10 md:pt-17">
       <div className="mx-auto max-w-4xl px-4">
         {/* ===== TITLE ===== */}
         <h2 className="text-center text-[28px] md:text-[34px] font-semibold text-ink mb-3 md:mb-5">

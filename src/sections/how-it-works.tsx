@@ -6,7 +6,7 @@ import { fadeUp, fadeRight } from "@/lib/motion";
 
 export function HowItWorks() {
   return (
-    <section className="bg-bg pt-10 md:pt-22">
+    <section id="como-funciona" className="bg-bg pt-10 md:pt-22">
       <div className="mx-auto max-w-7xl px-4">
         {/* Section title */}
         <h2 className="text-center text-h2-mobile md:text-h2-desktop font-semibold text-ink mb-8 md:mb-14">

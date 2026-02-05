@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/client": "^7.3.0",
     "@prisma/extension-accelerate": "^3.0.1",
+    "@react-google-maps/api": "^2.20.8",
     "clsx": "^2.1.1",
     "framer-motion": "^12.29.2",
     "next": "16.1.6",

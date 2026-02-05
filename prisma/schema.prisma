@@ -57,3 +57,19 @@ model DesignRequest {
   @@index([status])
   @@index([contactEmail])
 }
+
+model Contact {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+
+  firstName String
+  lastName  String
+  email     String
+  message   String
+
+  source String @default("contact_page")
+
+  @@index([createdAt])
+  @@index([email])
+}
