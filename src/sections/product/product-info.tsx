@@ -24,7 +24,7 @@ export function ProductInfo() {
     {[
         "<strong>Valor único</strong> — Sem mensalidades!",
         "Pensada para a identidade <strong>do seu negócio</strong>",
-        "Obtenha avaliações em <strong>4 segundos</strong>",
+        "Obtenha avaliações em <strong>5 segundos</strong>",
     ].map((text) => (
         <li key={text} className="flex flex-col gap-1">
         {/* icon + first line */}
