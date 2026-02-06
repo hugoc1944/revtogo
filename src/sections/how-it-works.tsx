@@ -69,19 +69,17 @@ export function HowItWorks() {
           {/* Text card (overlapping) */}
         <div className="relative z-10 -mt-8 flex justify-center px-4">
             <div className="bg-[#0F172A] text-white rounded-2xl p-6 w-[92%]">
-              <h3 className="text-[16px] font-semibold mb-3">
-                O cliente aproxima o telemóvel.
-                <br />
-                A avaliação abre.
+              <h3 className="text-[18px] font-semibold mb-3">
+                O cliente aproxima o telemóvel. A avaliação abre.
               </h3>
 
-              <p className="text-[13px] leading-[20px] text-white/90 mb-3">
+              <p className="text-[14px] leading-[20px] text-white/90 mb-3">
                 Sem apps, sem pesquisas, sem instruções.
                 <br />
                 A placa leva diretamente à página de avaliação do Google.
               </p>
 
-              <p className="text-[13px] italic text-white/70">
+              <p className="text-[14px] italic text-white/70">
                 Pensada para funcionar no dia a dia do seu espaço.
               </p>
             </div>
