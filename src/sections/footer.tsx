@@ -175,6 +175,19 @@ export function Footer() {
                   Política de Reembolso
                 </Link>
               </li>
+              <li>
+              <button
+                onClick={() =>
+                  window.dispatchEvent(
+                    new Event("open-cookie-consent")
+                  )
+                }
+                className="hover:text-white text-left"
+              >
+                Gerir consentimento de cookies
+              </button>
+            </li>
+
             </ul>
           </div>
         </div>

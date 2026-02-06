@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import Script from "next/script";
 import { DesignRequestOverlay } from "@/components/design-request/design-request-overlay";
+import { CookieConsent } from "@/components/cookie-consent";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,6 +29,27 @@ export default function RootLayout({
   return (
     <html lang="pt">
       <head>
+        {/* ===== Default Consent Mode ===== */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+
+              (function() {
+                var storedConsent = localStorage.getItem('cookie_consent');
+
+                var consentGranted = storedConsent === 'granted';
+
+                gtag('consent', 'default', {
+                  analytics_storage: consentGranted ? 'granted' : 'denied',
+                  ad_storage: consentGranted ? 'granted' : 'denied',
+                  wait_for_update: 500
+                });
+              })();
+            `,
+          }}
+        />
         {/* Google Tag Manager */}
         <Script
           id="gtm-script"
@@ -59,6 +81,7 @@ export default function RootLayout({
 
         {children}
         <DesignRequestOverlay />
+        <CookieConsent />
       </body>
     </html>
   );
