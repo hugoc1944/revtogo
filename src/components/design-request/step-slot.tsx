@@ -8,12 +8,18 @@ import { StepNotes } from "./steps/step-notes";
 import { StepSummary } from "./steps/step-summary";
 import { StepDelivery } from "./steps/step-delivery";
 import { StepSuccess } from "./steps/step-success";
+import { useEffect } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
 export function StepSlot() {
   const step = useDesignRequestStore((s) => s.step);
-
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: `design_step_${step}`,
+    });
+  }, [step]);
+  
   return (
     <AnimatePresence mode="wait">
       <motion.div

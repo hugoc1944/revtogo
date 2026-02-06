@@ -59,7 +59,10 @@ export function Header({ variant = "dark" }: HeaderProps) {
 
   const handleDesignRequest = () => {
     setOpen(false);
-
+    window.dataLayer?.push({
+      event: "design_request_start",
+      source: "header",
+    });
     if (pathname === "/") {
       scrollToTarget("revtogo-plus");
       setTimeout(() => {

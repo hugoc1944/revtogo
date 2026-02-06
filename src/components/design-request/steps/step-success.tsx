@@ -1,10 +1,15 @@
 "use client";
 
 import { useDesignRequestStore } from "@/stores/design-request.store";
+import { useEffect } from "react";
 
 export function StepSuccess() {
   const { close, reset } = useDesignRequestStore();
-
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "design_request_success",
+    });
+  }, []);
   return (
     <div className="flex flex-col gap-6 text-center py-6">
       <div className="text-[40px]">✅</div>

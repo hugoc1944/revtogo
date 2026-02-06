@@ -108,7 +108,14 @@ export function ProductInfo() {
       {/* ===== CTA ===== */}
       <div>
         <button
-          onClick={openDesignRequest}
+          onClick={() => {
+            window.dataLayer?.push({
+              event: "design_request_start",
+              source: "product_cta",
+            });
+
+            openDesignRequest();
+          }}
           className="
             w-full
             bg-primary

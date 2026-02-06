@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useDesignRequestStore } from "@/stores/design-request.store";
 
@@ -10,6 +10,12 @@ export function StepSummary() {
   const [error, setError] = useState<string | null>(null);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
   const [startedAt] = useState(Date.now());
+
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "design_request_summary_view",
+    });
+  }, []);
 
   const handleSubmit = async () => {
     if (!acceptedPrivacy) {
@@ -58,6 +64,12 @@ export function StepSummary() {
 
       if (!res.ok) throw new Error();
 
+      window.dataLayer?.push({
+        event: "design_request_submit",
+        delivery_method: data.deliveryMethod,
+        design_style: data.designStyle,
+      });
+      
       next();
     } catch {
       setError("Não foi possível enviar o pedido. Tente novamente.");

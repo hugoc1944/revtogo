@@ -40,7 +40,12 @@ export function ContactForm() {
     });
 
     setLoading(false);
-    if (res.ok) setSuccess(true);
+    if (res.ok){
+      window.dataLayer?.push({
+        event: "contact_submit",
+      });
+      setSuccess(true);
+    }
   }
 
   return (

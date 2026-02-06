@@ -39,6 +39,10 @@ export function Footer() {
   };
 
   const handleDesignRequest = () => {
+    window.dataLayer?.push({
+      event: "design_request_start",
+      source: "footer",
+    });
     if (pathname === "/") {
       scrollTo("revtogo-plus", 0);
       setTimeout(() => {

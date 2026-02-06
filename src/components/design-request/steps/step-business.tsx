@@ -28,6 +28,9 @@ export function StepBusiness() {
     });
 
     // ✅ Google selection → auto-advance
+    window.dataLayer?.push({
+      event: "design_business_google",
+    });
     next();
   };
 
@@ -40,6 +43,9 @@ export function StepBusiness() {
       googlePlaceId: undefined,
     });
 
+    window.dataLayer?.push({
+      event: "design_business_manual",
+    });
     next();
   };
 
