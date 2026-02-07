@@ -133,7 +133,7 @@ export function TrustBand() {
                 className="flex-shrink-0 flex flex-col items-center text-center"
               >
                 <Image src={item.icon} alt="" width={68} height={68} />
-                <p className="mt-3 text-[12px] leading-[18px] text-ink">
+                <p className="mt-3 text-[14px] leading-[18px] text-ink">
                   {item.text}
                 </p>
               </div>

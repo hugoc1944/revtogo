@@ -212,21 +212,30 @@ export function Footer() {
 
           <div className="flex items-center gap-4">
             <Link
-              href="https://www.instagram.com/revtogopt"
+              href="https://www.instagram.com/revtogo"
               target="_blank"
               aria-label="Instagram"
               className="hover:opacity-80"
             >
-              <Image src="/icons/icon1.png" alt="" width={22} height={22} />
+              <Image src="/icons/icon1.png" alt="Instagram" width={22} height={22} />
             </Link>
 
             <Link
-              href="https://www.facebook.com/revtogopt"
+              href="https://www.facebook.com/profile.php?id=61587631856100"
               target="_blank"
               aria-label="Facebook"
               className="hover:opacity-80"
             >
-              <Image src="/icons/icon2.png" alt="" width={22} height={22} />
+              <Image src="/icons/icon2.png" alt="Facebook" width={22} height={22} />
+            </Link>
+
+            <Link
+              href="https://wa.me/message/ECGYLHF444ALE1?text=Olá%20Revtogo%20👋"
+              target="_blank"
+              aria-label="WhatsApp"
+              className="hover:opacity-80"
+            >
+              <Image src="/icons/icon3.png" alt="WhatsApp" width={22} height={22} />
             </Link>
           </div>
         </div>

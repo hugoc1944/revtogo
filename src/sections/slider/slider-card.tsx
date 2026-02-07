@@ -61,7 +61,7 @@ export function SliderCard({ slide, active, mobile }: Props) {
         <span
           className={clsx(
             
-            mobile ? "text-[12px] text-white" : "text-[13px] text-white font-medium"
+            mobile ? "text-[14px] text-white" : "text-[13px] text-white font-medium"
           )}
         >
           {slide.pill}
@@ -111,7 +111,7 @@ export function SliderCard({ slide, active, mobile }: Props) {
           <p
             className={clsx(
               "text-muted",
-              mobile ? "text-[12px]" : "text-[14px]"
+              mobile ? "text-[15px]" : "text-[14px]"
             )}
           >
             {slide.hoverText}

@@ -28,5 +28,5 @@ button{
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 0.8s ease-in-out 4;
+  animation: pulse-glow 0.8s ease-in-out 3;
 }

@@ -22,16 +22,19 @@ export default function ProgramaFundadorPage() {
   };
 
   const goToHomeAndScroll = (targetId: string) => {
+    // 👇 mark that banner should not appear
+    sessionStorage.setItem("hide_launch_banner", "1");
+
     if (pathname === "/") {
-      requestAnimationFrame(() => scrollToTarget(targetId));
-      return;
+        requestAnimationFrame(() => scrollToTarget(targetId));
+        return;
     }
 
     router.push("/");
 
     setTimeout(() => {
-      scrollToTarget(targetId);
-    }, 450); // same timing as Header
+        scrollToTarget(targetId);
+    }, 450);
   };
 
   return (

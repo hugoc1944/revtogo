@@ -42,9 +42,17 @@ export function FounderSlots() {
     return () => window.removeEventListener("resize", updateCols);
   }, []);
 
+  /* Scroll helper */
+  const scrollToTarget = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   /* Scroll + glow logic */
   const handleSeeMySpot = async () => {
-    const rowEnd = Math.ceil((TARGET_INDEX + 1) / cols) * cols;
+    const rowEnd =
+      Math.ceil((TARGET_INDEX + 1) / cols) * cols;
 
     if (visible < rowEnd) {
       setVisible(rowEnd);
@@ -91,7 +99,7 @@ export function FounderSlots() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-5">
           {Array.from({ length: visible }).map((_, i) => {
             const status =
               i < TAKEN
@@ -104,7 +112,8 @@ export function FounderSlots() {
               <motion.div
                 key={i}
                 ref={(el) => {
-                  cardRefs.current[i] = el;
+                cardRefs.current[i] = el;
+                return;
                 }}
                 custom={i}
                 variants={cardVariants}
@@ -161,11 +170,17 @@ export function FounderSlots() {
                   Nome do Negócio
                 </p>
 
-                {/* Testimonial */}
-                <p className="text-[14px] text-ink/70 leading-relaxed">
-                  Pequeno testemunho sobre a experiência com a placa
-                  Revtogo.
+                {/* Testimonial — mobile */}
+                <p className="block md:hidden text-[14px] text-ink/70 leading-relaxed">
+                Pequeno testemunho sobre a experiência
                 </p>
+
+                {/* Testimonial — desktop */}
+                <p className="hidden md:block text-[14px] text-ink/70 leading-relaxed">
+                Pequeno testemunho sobre a experiência com a placa
+                Revtogo.
+                </p>
+
 
                 {/* Slot number */}
                 <div
@@ -188,17 +203,18 @@ export function FounderSlots() {
 
         {/* Ver mais */}
         {visible < TOTAL && (
-          <div className="mt-12 text-center">
+        <div className="mt-12 text-center">
             <button
-              onClick={() =>
+            onClick={() =>
                 setVisible((v) => Math.min(v + LOAD_STEP, TOTAL))
-              }
-              className="text-[15px] font-medium text-primary hover:underline"
+            }
+            className="text-[15px] font-medium text-primary hover:underline"
             >
-              Ver mais
+            Ver mais
             </button>
-          </div>
+        </div>
         )}
+
       </div>
 
       {/* Glow animation */}

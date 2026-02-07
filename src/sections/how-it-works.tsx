@@ -73,13 +73,11 @@ export function HowItWorks() {
                 O cliente aproxima o telemóvel. A avaliação abre.
               </h3>
 
-              <p className="text-[14px] leading-[20px] text-white/90 mb-3">
-                Sem apps, sem pesquisas, sem instruções.
-                <br />
-                A placa leva diretamente à página de avaliação do Google.
+              <p className="text-[16px] leading-[20px] text-white/90 mb-3">
+                Sem apps, sem pesquisas, sem instruções. A placa leva diretamente à página de avaliação do Google.
               </p>
 
-              <p className="text-[14px] italic text-white/70">
+              <p className="text-[15px] italic text-white/70">
                 Pensada para funcionar no dia a dia do seu espaço.
               </p>
             </div>

@@ -80,7 +80,7 @@ export function ContactSection() {
                 {/* Social icons */}
                 <div className="flex items-center gap-4 pt-1 pb-6">
                   <a
-                    href="https://www.instagram.com/revtogopt"
+                    href="https://www.instagram.com/revtogo"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="opacity-70 hover:opacity-100 transition-opacity"
@@ -94,7 +94,7 @@ export function ContactSection() {
                   </a>
 
                   <a
-                    href="https://www.facebook.com/revtogopt"
+                    href="https://www.facebook.com/profile.php?id=61587631856100"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="opacity-70 hover:opacity-100 transition-opacity"
@@ -106,7 +106,22 @@ export function ContactSection() {
                       height={32}
                     />
                   </a>
+
+                  <a
+                    href="https://wa.me/message/ECGYLHF444ALE1?text=Olá%20Revtogo%20👋"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="opacity-70 hover:opacity-100 transition-opacity"
+                  >
+                    <Image
+                      src="/icons/icon3_dark.png"
+                      alt="WhatsApp"
+                      width={32}
+                      height={32}
+                    />
+                  </a>
                 </div>
+
               </div>
             </div>
 

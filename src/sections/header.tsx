@@ -64,6 +64,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
       event: "design_request_start",
       source: "header",
     });
+
     if (pathname === "/") {
       scrollToTarget("revtogo-plus");
       setTimeout(() => {
@@ -204,7 +205,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
             )}
           </nav>
 
-          {/* Secondary nav — bottom */}
+          {/* Secondary nav */}
           <div className="mt-auto pt-10 border-t border-ink/10">
             <nav className="space-y-4">
               {MOBILE_SECONDARY_NAV.map((item) =>
@@ -212,13 +213,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
                   <button
                     key={item.label}
                     onClick={handleDesignRequest}
-                    className="
-                      block
-                      text-[15px]
-                      text-ink/60
-                      hover:text-primary
-                      transition
-                    "
+                    className="block text-[15px] text-ink/60 hover:text-primary transition"
                   >
                     {item.label}
                   </button>
@@ -229,13 +224,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
                       setOpen(false);
                       router.push(item.href);
                     }}
-                    className="
-                      block
-                      text-[15px]
-                      text-ink/60
-                      hover:text-primary
-                      transition
-                    "
+                    className="block text-[15px] text-ink/60 hover:text-primary transition"
                   >
                     {item.label}
                   </button>
@@ -243,19 +232,58 @@ export function Header({ variant = "dark" }: HeaderProps) {
                   <button
                     key={item.label}
                     onClick={() => handleScrollNav(item.target!)}
-                    className="
-                      block
-                      text-[15px]
-                      text-ink/60
-                      hover:text-primary
-                      transition
-                    "
+                    className="block text-[15px] text-ink/60 hover:text-primary transition"
                   >
                     {item.label}
                   </button>
                 )
               )}
             </nav>
+
+            {/* Social icons */}
+            <div className="mt-8 flex items-center justify-center gap-6">
+              <a
+                href="https://www.instagram.com/revtogo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-60 hover:opacity-100 transition-opacity"
+              >
+                <Image
+                  src="/icons/icon1_dark.png"
+                  alt="Instagram"
+                  width={28}
+                  height={28}
+                />
+              </a>
+
+              <a
+                href="https://www.facebook.com/profile.php?id=61587631856100"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-60 hover:opacity-100 transition-opacity"
+              >
+                <Image
+                  src="/icons/icon2_dark.png"
+                  alt="Facebook"
+                  width={28}
+                  height={28}
+                />
+              </a>
+
+              <a
+                href="https://wa.me/message/ECGYLHF444ALE1?text=Olá%20Revtogo%20👋"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-60 hover:opacity-100 transition-opacity"
+              >
+                <Image
+                  src="/icons/icon3_dark.png"
+                  alt="WhatsApp"
+                  width={28}
+                  height={28}
+                />
+              </a>
+            </div>
           </div>
         </div>
       </div>

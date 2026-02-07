@@ -16,12 +16,12 @@ export function LaunchBanner() {
   const [dismissed, setDismissed] = useState(false);
 
   // ─────────────────────────────────────────────
-  // Initial 8s delay
+  // Initial delay (6s)
   // ─────────────────────────────────────────────
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerVisible(true);
-    }, 8000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -41,9 +41,28 @@ export function LaunchBanner() {
   }, []);
 
   // ─────────────────────────────────────────────
+  // Suppress banner when coming from Programa Fundador
+  // (reacts to navigation, not mount)
+  // ─────────────────────────────────────────────
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (pathname === "/") {
+      const shouldHide =
+        sessionStorage.getItem("hide_launch_banner") === "1";
+
+      if (shouldHide) {
+        setDismissed(true); // instantly hide
+        sessionStorage.removeItem("hide_launch_banner"); // consume once
+      }
+    }
+  }, [pathname]);
+
+  // ─────────────────────────────────────────────
   // Final visibility logic
   // ─────────────────────────────────────────────
   const isExcludedRoute = pathname === "/programa-fundador";
+
   const shouldShow =
     !isExcludedRoute &&
     timerVisible &&
@@ -81,42 +100,43 @@ export function LaunchBanner() {
           className="
             relative
             mx-auto max-w-7xl
-            px-4 py-3
-            flex flex-col gap-3
+            px-4 py-4
+            flex flex-col gap-4
             md:flex-row md:items-center md:gap-4
-            text-center md:text-left
+            text-left
           "
         >
           {/* Text */}
-          <p className="flex-1 text-[14.5px] leading-snug md:text-[14px]">
-            <span className="font-semibold block md:inline">
+          <div className="flex-1 space-y-1">
+            <p className="text-[16px] leading-tight font-semibold md:text-[14px]">
               Programa Fundador Revtogo
-            </span>
-            <span className="text-white/80 block md:inline md:ml-1">
+            </p>
+
+            <p className="text-[15px] leading-snug text-white/80 md:text-[14px]">
               Preço especial 56,95€ · Design gratuito antes de pagar ·
               Destaque no site por 12 meses
-            </span>
-          </p>
+            </p>
+          </div>
 
           {/* CTA */}
           <Link
             href="/programa-fundador"
             onClick={handleBannerClick}
             className="
-                self-center md:self-auto
-                inline-flex items-center justify-center
-                px-4 py-2
-                rounded-full
-                text-[14px] font-semibold
-                bg-white/10
-                text-primary
-                hover:bg-white/15
-                transition
-                whitespace-nowrap
+              w-full md:w-auto
+              inline-flex items-center justify-center
+              px-5 py-2.5
+              rounded-full
+              text-[14px] font-semibold
+              bg-white/10
+              text-primary
+              hover:bg-white/15
+              transition
+              whitespace-nowrap
             "
-            >
+          >
             Saber mais →
-            </Link>
+          </Link>
 
           {/* Close */}
           <button
@@ -128,7 +148,7 @@ export function LaunchBanner() {
               flex items-center justify-center
               w-8 h-8
               rounded-full
-              text-white/80
+              text-white/70
               hover:text-white
               hover:bg-white/10
               transition
