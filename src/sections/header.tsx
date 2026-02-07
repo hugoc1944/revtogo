@@ -17,6 +17,7 @@ const PRIMARY_NAV = [
 
 const MOBILE_SECONDARY_NAV = [
   { label: "Questões frequentes", target: "faq" },
+  { label: "Programa Fundador", href: "/programa-fundador" },
   { label: "Pedir design da minha placa", action: "design" },
 ];
 
@@ -211,6 +212,23 @@ export function Header({ variant = "dark" }: HeaderProps) {
                   <button
                     key={item.label}
                     onClick={handleDesignRequest}
+                    className="
+                      block
+                      text-[15px]
+                      text-ink/60
+                      hover:text-primary
+                      transition
+                    "
+                  >
+                    {item.label}
+                  </button>
+                ) : item.href ? (
+                  <button
+                    key={item.label}
+                    onClick={() => {
+                      setOpen(false);
+                      router.push(item.href);
+                    }}
                     className="
                       block
                       text-[15px]

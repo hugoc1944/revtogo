@@ -134,6 +134,14 @@ export function Footer() {
                   Questões frequentes
                 </button>
               </li>
+              <li>
+                <Link
+                  href="/programa-fundador"
+                  className="hover:text-white font-medium"
+                >
+                  Programa Fundador
+                </Link>
+              </li>
 
               <li>
                 <button

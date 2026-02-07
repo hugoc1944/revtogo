@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { DesignRequestOverlay } from "@/components/design-request/design-request-overlay";
 import { CookieConsent } from "@/components/cookie-consent";
+import { LaunchBanner } from "@/components/LaunchBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -78,6 +79,9 @@ export default function RootLayout({
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+
+        <LaunchBanner />
+
 
         {children}
         <DesignRequestOverlay />
