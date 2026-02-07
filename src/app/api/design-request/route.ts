@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     }
 
     /* ⏱ Time-based protection (min 5s) */
-    if (!body.startedAt || Date.now() - body.startedAt < 5000) {
+    if (!body.startedAt || Date.now() - body.startedAt < 3000) {
       return NextResponse.json(
         { error: "Submission too fast" },
         { status: 400 }

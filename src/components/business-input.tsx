@@ -26,6 +26,8 @@ export function BusinessInput({
   const googleReady = useGooglePlaces();
   const [hasSelectedFromGoogle, setHasSelectedFromGoogle] = useState(false);
 
+  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+
   // Prefill once
   useEffect(() => {
     if (inputRef.current && defaultValue) {
@@ -35,38 +37,43 @@ export function BusinessInput({
   }, [defaultValue]);
 
   useEffect(() => {
-    if (!googleReady || !inputRef.current || !window.google) return;
+  if (
+    !googleReady ||
+    !inputRef.current ||
+    !window.google ||
+    autocompleteRef.current
+  ) {
+    return;
+  }
 
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      inputRef.current,
-      {
-        types: ["establishment"],
-        fields: ["name", "place_id", "formatted_address"],
-      }
-    );
+  const autocomplete = new window.google.maps.places.Autocomplete(
+    inputRef.current,
+    {
+      types: ["establishment"],
+      fields: ["name", "place_id", "formatted_address"],
+    }
+  );
 
-    autocomplete.addListener("place_changed", () => {
-      const place = autocomplete.getPlace();
-      if (!place?.name) return;
+  autocomplete.addListener("place_changed", () => {
+    const place = autocomplete.getPlace();
+    if (!place?.name) return;
 
-      const label = place.formatted_address
-        ? `${place.name}, ${place.formatted_address}`
-        : place.name;
+    const label = place.formatted_address
+      ? `${place.name}, ${place.formatted_address}`
+      : place.name;
 
-      inputRef.current!.value = label;
-      setHasSelectedFromGoogle(true);
+    inputRef.current!.value = label;
+    setHasSelectedFromGoogle(true);
 
-      onBusinessSelect({
-        name: place.name,
-        placeId: place.place_id,
-        formattedAddress: place.formatted_address,
-      });
+    onBusinessSelect({
+      name: place.name,
+      placeId: place.place_id,
+      formattedAddress: place.formatted_address,
     });
+  });
 
-    return () => {
-      window.google.maps.event.clearInstanceListeners(autocomplete);
-    };
-  }, [googleReady, onBusinessSelect]);
+  autocompleteRef.current = autocomplete;
+}, [googleReady, onBusinessSelect]);
 
   return (
     <div className="w-full rounded-xl bg-surface p-4">

@@ -53,6 +53,7 @@ export function StepContact() {
 
     next();
   };
+  const [emailTouched, setEmailTouched] = useState(false);
 
   return (
     <div className="flex flex-col gap-6">
@@ -71,6 +72,8 @@ export function StepContact() {
           </label>
           <input
             type="text"
+            name="given-name"
+            autoComplete="given-name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             placeholder="O seu primeiro nome"
@@ -97,6 +100,8 @@ export function StepContact() {
           </label>
           <input
             type="text"
+            name="family-name"
+            autoComplete="family-name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             placeholder="O seu apelido"
@@ -125,8 +130,11 @@ export function StepContact() {
         </label>
         <input
           type="email"
+          name="email"
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setEmailTouched(true)}
           placeholder="O seu email"
           className="
             w-full
@@ -144,7 +152,7 @@ export function StepContact() {
           "
         />
 
-        {email.length > 0 && !isValidEmail(email) && (
+        {emailTouched && email.length > 0 && !isValidEmail(email) && (
           <p className="text-[12px] text-red-500 mt-1">
             Introduza um email válido
           </p>
@@ -158,6 +166,8 @@ export function StepContact() {
         </label>
         <input
           type="tel"
+          name="tel"
+          autoComplete="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="O seu número"

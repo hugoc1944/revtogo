@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDesignRequestStore } from "@/stores/design-request.store";
 import clsx from "clsx";
+import Image from "next/image";
 
 type DesignOption = {
   id: "solid" | "art";
@@ -76,15 +77,26 @@ export function StepDesign() {
                   : "border-black/10 bg-bg hover:border-black/20"
               )}
             >
-              {/* Preview square */}
-              <div
-                className={clsx(
-                  "h-14 w-14 rounded-xl flex-shrink-0",
+            {/* Preview image */}
+            <div
+              className={clsx(
+                "h-14 w-14 rounded-xl flex-shrink-0 overflow-hidden",
+                "bg-neutral-100"
+              )}
+            >
+              <Image
+                src={
                   option.id === "solid"
-                    ? "bg-neutral-200"
-                    : "bg-gradient-to-br from-neutral-300 to-neutral-100"
-                )}
+                    ? "/plain_preview.png"
+                    : "/design_preview.png"
+                }
+                alt={option.title}
+                width={56}
+                height={56}
+                className="h-full w-full object-cover"
+                priority
               />
+            </div>
 
               {/* Text */}
               <div className="flex flex-col">
