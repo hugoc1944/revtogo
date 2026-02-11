@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
 export async function PATCH(
-  req: Request,
-  ctx: { params: Promise<{ id: string }> }
+  req: NextRequest,
+  context: { params: Promise<{ shortId: string }> }
 ) {
-  const { id } = await ctx.params;
+  const { shortId } = await context.params;
   const { status } = await req.json();
 
   if (!["active", "inactive"].includes(status)) {
@@ -18,7 +18,7 @@ export async function PATCH(
   }
 
   const plate = await prisma.plate.update({
-    where: { id },
+    where: { shortId },
     data: { status },
   });
 
