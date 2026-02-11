@@ -1,0 +1,17 @@
+import { NextResponse } from "next/server";
+
+export const runtime = "nodejs";
+
+export async function POST() {
+  const res = NextResponse.json({ success: true });
+
+  res.cookies.set("revtogo_admin_session", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    expires: new Date(0), // EXPIRE IMMEDIATELY
+  });
+
+  return res;
+}

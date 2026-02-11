@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "DesignRequest" ADD COLUMN     "statusUpdatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

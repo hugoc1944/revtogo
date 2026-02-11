@@ -3,15 +3,15 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import clsx from "clsx";
+import Image from "next/image";
+import { founderSlots } from "@/data/founders";
 
 const TOTAL = 50;
-const TAKEN = 1;
+const TAKEN = founderSlots.length; // 🔥 dynamic now
 const LOAD_STEP = 8;
 
-/* Slot the user can get */
 const TARGET_INDEX = TAKEN;
 
-/* Animation variants */
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 18 },
   visible: (i: number) => ({
@@ -32,7 +32,6 @@ export function FounderSlots() {
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  /* Detect columns */
   useEffect(() => {
     const updateCols = () => {
       setCols(window.innerWidth < 768 ? 2 : 4);
@@ -42,14 +41,6 @@ export function FounderSlots() {
     return () => window.removeEventListener("resize", updateCols);
   }, []);
 
-  /* Scroll helper */
-  const scrollToTarget = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  /* Scroll + glow logic */
   const handleSeeMySpot = async () => {
     const rowEnd =
       Math.ceil((TARGET_INDEX + 1) / cols) * cols;
@@ -73,7 +64,8 @@ export function FounderSlots() {
   return (
     <section className="pt-24">
       <div className="mx-auto max-w-7xl px-4">
-        {/* Header row */}
+
+        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <p className="text-surface/75 text-[16px]">
             Já ocupados{" "}
@@ -101,6 +93,9 @@ export function FounderSlots() {
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-5">
           {Array.from({ length: visible }).map((_, i) => {
+
+            const founder = founderSlots[i];
+
             const status =
               i < TAKEN
                 ? "taken"
@@ -112,8 +107,8 @@ export function FounderSlots() {
               <motion.div
                 key={i}
                 ref={(el) => {
-                cardRefs.current[i] = el;
-                return;
+                  cardRefs.current[i] = el;
+                  return;
                 }}
                 custom={i}
                 variants={cardVariants}
@@ -149,14 +144,31 @@ export function FounderSlots() {
                     : "Disponível"}
                 </div>
 
-                {/* Photo */}
-                <div className="relative h-[130px] rounded-xl bg-neutral-200 flex items-center justify-center mb-4">
-                  <span className="text-[13px] uppercase tracking-wide text-ink/50">
-                    Fotografia
-                  </span>
+                {/* Photo / Logo */}
+                <div
+                  className="relative h-[130px] rounded-xl flex items-center justify-center mb-4"
+                  style={
+                    status === "taken" && founder
+                      ? { backgroundColor: founder.color }
+                      : undefined
+                  }
+                >
+                  {status === "taken" && founder ? (
+                    <Image
+                      src={`/found_logos/${founder.logo}`}
+                      alt={founder.name}
+                      width={140}
+                      height={70}
+                      className="object-contain max-h-[160px]"
+                    />
+                  ) : (
+                    <span className="text-[13px] uppercase tracking-wide text-ink/50">
+                      Fotografia
+                    </span>
+                  )}
                 </div>
 
-                {/* Stars */}
+                {/* Stars (unchanged) */}
                 <div className="flex gap-1 mb-2">
                   {Array.from({ length: 5 }).map((_, s) => (
                     <span key={s} className="text-primary text-[15px]">
@@ -167,20 +179,19 @@ export function FounderSlots() {
 
                 {/* Business name */}
                 <p className="text-[15px] font-semibold mb-1">
-                  Nome do Negócio
+                  {status === "taken" && founder
+                    ? founder.name
+                    : "Nome do Negócio"}
                 </p>
 
-                {/* Testimonial — mobile */}
+                {/* Testimonial — KEEP placeholder */}
                 <p className="block md:hidden text-[14px] text-ink/70 leading-relaxed">
-                Pequeno testemunho sobre a experiência
+                  Pequeno testemunho sobre a experiência
                 </p>
 
-                {/* Testimonial — desktop */}
                 <p className="hidden md:block text-[14px] text-ink/70 leading-relaxed">
-                Pequeno testemunho sobre a experiência com a placa
-                Revtogo.
+                  Pequeno testemunho sobre a experiência com a placa Revtogo.
                 </p>
-
 
                 {/* Slot number */}
                 <div
@@ -201,36 +212,26 @@ export function FounderSlots() {
           })}
         </div>
 
-        {/* Ver mais */}
         {visible < TOTAL && (
-        <div className="mt-12 text-center">
+          <div className="mt-12 text-center">
             <button
-            onClick={() =>
+              onClick={() =>
                 setVisible((v) => Math.min(v + LOAD_STEP, TOTAL))
-            }
-            className="text-[15px] font-medium text-primary hover:underline"
+              }
+              className="text-[15px] font-medium text-primary hover:underline"
             >
-            Ver mais
+              Ver mais
             </button>
-        </div>
+          </div>
         )}
-
       </div>
 
-      {/* Glow animation */}
       <style jsx>{`
         @keyframes pulse-glow {
-          0% {
-            box-shadow: 0 0 0 rgba(16, 185, 129, 0);
-          }
-          50% {
-            box-shadow: 0 0 55px rgba(16, 185, 129, 0.75);
-          }
-          100% {
-            box-shadow: 0 0 0 rgba(16, 185, 129, 0);
-          }
+          0% { box-shadow: 0 0 0 rgba(16,185,129,0); }
+          50% { box-shadow: 0 0 55px rgba(16,185,129,0.75); }
+          100% { box-shadow: 0 0 0 rgba(16,185,129,0); }
         }
-
         .animate-pulse-glow {
           animation: pulse-glow 0.8s ease-in-out 5;
         }

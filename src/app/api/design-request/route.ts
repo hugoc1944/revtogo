@@ -28,6 +28,10 @@ const DesignRequestSchema = z.object({
 
   // Notes
   notes: z.string().max(500).optional(),
+
+  // NEW (Admin / Find)
+  source: z.string().optional(),
+  stopId: z.string().optional(),
 });
 
 /* =========================
@@ -38,7 +42,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    /* 🐝 Honeypot check */
     if (body.company) {
       return NextResponse.json(
         { error: "Spam detected" },
@@ -46,7 +49,6 @@ export async function POST(req: Request) {
       );
     }
 
-    /* ⏱ Time-based protection (min 5s) */
     if (!body.startedAt || Date.now() - body.startedAt < 3000) {
       return NextResponse.json(
         { error: "Submission too fast" },
@@ -56,55 +58,87 @@ export async function POST(req: Request) {
 
     const data = DesignRequestSchema.parse(body);
 
-    // Enforce WhatsApp → phone rule
     if (data.deliveryMethod === "whatsapp" && !data.contactPhone) {
       return NextResponse.json(
-        { error: "Phone number required for WhatsApp delivery." },
+        { error: "Phone required for WhatsApp delivery." },
         { status: 400 }
       );
     }
 
     const fullName = `${data.contactFirstName} ${data.contactLastName}`;
 
+    /**
+     * 1️⃣ Create DesignRequest
+     */
     const designRequest = await prisma.designRequest.create({
       data: {
-        // Business
         businessName: data.businessName,
         googlePlaceId: data.googlePlaceId,
         businessCity: data.businessCity,
 
-        // Contact
         contactName: fullName,
         contactEmail: data.contactEmail,
         contactPhone: data.contactPhone,
 
-        // Design / Delivery
         designStyle: data.designStyle,
         deliveryMethod: data.deliveryMethod,
 
-        // Notes
         notes: data.notes,
-
-        // Meta
-        source: "landing",
+        source: data.source ?? "landing",
       },
     });
+
+    /**
+     * 2️⃣ If coming from Find Mission
+     */
+    console.log("DATA SOURCE "+data.source+" --- DATA STOPID"+data.stopId);
+    if (data.source === "find_mission" && data.stopId) {
+
+      console.log("AAAAAAAAAAAAA");
+      const updatedStop = await prisma.findMissionStop.update({
+        where: { id: data.stopId },
+        data: {
+          visitOutcome: "accepted",
+          visitedAt: new Date(),
+        },
+        include: {
+          mission: {
+            include: { stops: true },
+          },
+        },
+      });
+
+      await prisma.findVisit.create({
+        data: {
+          missionStopId: data.stopId,
+          outcome: "accepted",
+          designRequestId: designRequest.id,
+          arrivedAt: new Date(),
+          actionTakenAt: new Date(),
+        },
+      });
+
+      const allCompleted = updatedStop.mission.stops.every(
+        (s) => s.visitOutcome !== "pending"
+      );
+
+      if (allCompleted) {
+        await prisma.findMission.update({
+          where: { id: updatedStop.missionId },
+          data: {
+            status: "done",
+            finishedAt: new Date(),
+          },
+        });
+      }
+    }
 
     return NextResponse.json(
       { success: true, id: designRequest.id },
       { status: 201 }
     );
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          error: "Invalid request data",
-          issues: error.issues,
-        },
-        { status: 400 }
-      );
-    }
 
+  } catch (error) {
     console.error("[DESIGN_REQUEST_ERROR]", error);
 
     return NextResponse.json(

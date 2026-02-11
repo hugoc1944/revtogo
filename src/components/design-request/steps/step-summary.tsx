@@ -43,22 +43,11 @@ export function StepSummary() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          company: "",        
+          company: "",
           startedAt,
-          
-          businessName: data.businessName,
-          googlePlaceId: data.googlePlaceId,
-          businessCity: data.businessCity,
 
-          contactFirstName: data.contactFirstName,
-          contactLastName: data.contactLastName,
-          contactEmail: data.contactEmail,
-          contactPhone: data.contactPhone,
-
-          designStyle: data.designStyle,
-          deliveryMethod: data.deliveryMethod,
-
-          notes: data.notes,
+          // 🚀 SEND EVERYTHING FROM STORE
+          ...data,
         }),
       });
 
@@ -69,7 +58,7 @@ export function StepSummary() {
         delivery_method: data.deliveryMethod,
         design_style: data.designStyle,
       });
-      
+
       next();
     } catch {
       setError("Não foi possível enviar o pedido. Tente novamente.");

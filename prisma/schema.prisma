@@ -21,11 +21,54 @@ enum DeliveryMethod {
 }
 
 enum RequestStatus {
-  pending
-  sent
-  approved
-  rejected
+  pending        // recebido
+  design_sent    // design enviado
+  refused        // recusado
+  producing      // pago / em produção
+  delivered      // entregue
 }
+
+enum PlateStatus {
+  producing   // plate created, not installed yet
+  active      // installed & collecting scans
+  inactive    // disabled (manual)
+}
+
+enum ContactStatus {
+  pending
+  in_progress
+  solved
+}
+
+enum UserRole {
+  admin
+}
+
+enum FindCategory {
+  beauty
+  food
+  tourism
+}
+enum MissionStatus {
+  todo
+  in_progress
+  done
+  abandoned
+}
+enum VisitOutcome {
+  pending
+  accepted
+  refused
+  skipped
+}
+enum RefusalReason {
+  not_interested
+  already_has_solution
+  owner_not_present
+  franchise
+  language_barrier
+}
+
 
 /* =========================
    MODELS
@@ -37,7 +80,8 @@ model DesignRequest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  status RequestStatus @default(pending)
+  status           RequestStatus @default(pending)
+  statusUpdatedAt  DateTime      @default(now())
 
   businessName  String
   googlePlaceId String?
@@ -47,16 +91,24 @@ model DesignRequest {
   contactEmail String
   contactPhone String?
 
-  designStyle DesignStyle
+  designStyle    DesignStyle
   deliveryMethod DeliveryMethod
 
-  notes String?
+  notes  String?
   source String @default("landing")
+
+  plate Plate?
+
+  findVisit FindVisit?
 
   @@index([createdAt])
   @@index([status])
   @@index([contactEmail])
 }
+
+/* -------------------------
+   CONTACT FORM
+   ------------------------- */
 
 model Contact {
   id String @id @default(uuid())
@@ -68,8 +120,176 @@ model Contact {
   email     String
   message   String
 
+  status ContactStatus @default(pending)
   source String @default("contact_page")
 
   @@index([createdAt])
   @@index([email])
+  @@index([status])
+}
+
+/* -------------------------
+   PLATES
+   ------------------------- */
+
+model Plate {
+  id String @id @default(uuid())
+
+  shortId String @unique
+  name    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status PlateStatus @default(producing)
+
+  designRequestId String @unique
+  designRequest   DesignRequest @relation(fields: [designRequestId], references: [id])
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  scans PlateScan[]
+
+  @@index([shortId])
+  @@index([status])
+  @@index([clientId])
+}
+
+/* -------------------------
+   PLATE SCANS (QR + NFC)
+   ------------------------- */
+
+model PlateScan {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+
+  plateId String
+  plate   Plate @relation(fields: [plateId], references: [id])
+
+  /** Privacy-safe metadata */
+  ipHash    String?
+  userAgent String?
+  country   String?
+
+  @@index([plateId])
+  @@index([createdAt])
+}
+
+/* -------------------------
+   ADMIN USERS
+   ------------------------- */
+
+model User {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email        String @unique
+  username     String @unique
+  passwordHash String
+
+  role UserRole @default(admin)
+
+  @@index([email])
+  @@index([username])
+}
+
+model Client {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  name  String?
+  phone String?
+
+  plates Plate[]
+
+  @@index([email])
+}
+
+
+
+
+
+
+
+
+model FindMission {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+  city String
+  category FindCategory
+
+  centerLat Float
+  centerLng Float
+  radiusKm Float @default(2)
+
+  estimatedDurationMinutes Int
+
+  status MissionStatus @default(todo)
+
+  startedAt  DateTime?
+  finishedAt DateTime?
+
+  stops FindMissionStop[]
+
+  @@index([city])
+  @@index([category])
+  @@index([status])
+}
+model FindMissionStop {
+  id String @id @default(uuid())
+
+  missionId String
+  mission   FindMission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  googlePlaceId String
+  businessName  String
+
+  lat Float
+  lng Float
+
+  orderIndex Int
+
+  estimatedWalkMinutes Int?
+
+  visitOutcome VisitOutcome @default(pending)
+
+  refusalReason RefusalReason?
+
+  visitedAt DateTime?
+
+  visit FindVisit?
+
+  @@index([missionId])
+  @@index([googlePlaceId])
+  @@unique([missionId, orderIndex])
+}
+model FindVisit {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+
+  missionStopId String @unique
+  missionStop   FindMissionStop @relation(fields: [missionStopId], references: [id], onDelete: Cascade)
+
+  arrivedAt DateTime?
+  actionTakenAt DateTime?
+
+  outcome VisitOutcome
+
+  refusalReason RefusalReason?
+  designRequestId String? @unique
+  designRequest   DesignRequest? @relation(fields: [designRequestId], references: [id])
+
+  @@index([outcome])
 }

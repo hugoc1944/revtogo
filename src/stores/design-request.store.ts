@@ -26,6 +26,9 @@ type DesignRequestData = {
   deliveryMethod?: "email" | "whatsapp";
 
   notes?: string;
+
+  source?: string;
+  stopId?: string;
 };
 
 type DesignRequestStore = {
