@@ -113,7 +113,7 @@ export function LaunchBanner() {
             </p>
 
             <p className="text-[15px] leading-snug text-white/80 md:text-[14px]">
-              Preço especial 56,95€ · Design gratuito antes de pagar ·
+              Preço especial 59,90€ · Design gratuito antes de pagar ·
               Destaque no site por 12 meses
             </p>
           </div>

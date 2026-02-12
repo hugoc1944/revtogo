@@ -7,10 +7,12 @@ import Image from "next/image";
 import { founderSlots } from "@/data/founders";
 
 const TOTAL = 50;
-const TAKEN = founderSlots.length; // 🔥 dynamic now
+const TAKEN = founderSlots.length;
 const LOAD_STEP = 8;
-
 const TARGET_INDEX = TAKEN;
+
+// 🔥 First 10 are premium visibility
+const PREMIUM_LIMIT = 10;
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -66,7 +68,7 @@ export function FounderSlots() {
       <div className="mx-auto max-w-7xl px-4">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-2">
           <p className="text-surface/75 text-[16px]">
             Já ocupados{" "}
             <strong className="text-surface font-semibold">
@@ -90,6 +92,13 @@ export function FounderSlots() {
           </button>
         </div>
 
+        {/* 🔥 Visibility Micro Copy */}
+        <p className="text-[14px] text-surface/60 mb-8">
+          As posições <strong>#1 a #{PREMIUM_LIMIT}</strong> são as primeiras
+          a aparecer na secção de destaque da landing page e recebem maior
+          visibilidade.
+        </p>
+
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-5">
           {Array.from({ length: visible }).map((_, i) => {
@@ -102,6 +111,8 @@ export function FounderSlots() {
                 : i === TAKEN
                 ? "yours"
                 : "available";
+
+            const isPremium = i < PREMIUM_LIMIT;
 
             return (
               <motion.div
@@ -116,6 +127,7 @@ export function FounderSlots() {
                 animate="visible"
                 className={clsx(
                   "relative rounded-2xl bg-surface text-ink p-5 border transition-all",
+                  isPremium && "ring-1 ring-primary/30",
                   status === "taken" &&
                     "border-primary/40 shadow-[0_0_48px_rgba(255,180,0,0.28)]",
                   status === "yours" &&
@@ -125,6 +137,7 @@ export function FounderSlots() {
                   highlight === i && "animate-pulse-glow"
                 )}
               >
+                
                 {/* Badge */}
                 <div
                   className={clsx(
@@ -140,7 +153,7 @@ export function FounderSlots() {
                   {status === "taken"
                     ? "Já ocupado"
                     : status === "yours"
-                    ? "Pode ser o seu"
+                    ? "Próxima posição disponível"
                     : "Disponível"}
                 </div>
 
@@ -168,7 +181,7 @@ export function FounderSlots() {
                   )}
                 </div>
 
-                {/* Stars (unchanged) */}
+                {/* Stars */}
                 <div className="flex gap-1 mb-2">
                   {Array.from({ length: 5 }).map((_, s) => (
                     <span key={s} className="text-primary text-[15px]">
@@ -184,12 +197,7 @@ export function FounderSlots() {
                     : "Nome do Negócio"}
                 </p>
 
-                {/* Testimonial — KEEP placeholder */}
-                <p className="block md:hidden text-[14px] text-ink/70 leading-relaxed">
-                  Pequeno testemunho sobre a experiência
-                </p>
-
-                <p className="hidden md:block text-[14px] text-ink/70 leading-relaxed">
+                <p className="text-[14px] text-ink/70 leading-relaxed">
                   Pequeno testemunho sobre a experiência com a placa Revtogo.
                 </p>
 

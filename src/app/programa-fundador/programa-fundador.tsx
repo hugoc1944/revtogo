@@ -72,15 +72,15 @@ export default function ProgramaFundadorClient() {
               </h2>
 
               <p className="text-surface/80 text-[16px] leading-relaxed mb-3">
-                O preço público previsto da placa Revtogo será entre{" "}
-                <strong className="text-surface">€68,95 e €72,95</strong>.
+                O preço público previsto da placa Revtogo será de{" "}
+                <strong className="text-surface">€74,90</strong>.
               </p>
 
               <p className="text-surface/80 text-[16px] leading-relaxed">
                 Durante o Programa Fundador, o valor é fixado em{" "}
-                <strong className="text-primary">€56,95</strong>.
+                <strong className="text-primary">€59,90</strong>.
                 Um desconto real de aproximadamente{" "}
-                <strong className="text-surface">30%</strong>.
+                <strong className="text-surface">20%</strong>.
               </p>
             </div>
           </div>

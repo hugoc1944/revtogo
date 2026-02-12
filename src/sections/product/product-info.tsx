@@ -51,7 +51,7 @@ export function ProductInfo() {
     {/* Price (de-emphasized but readable) */}
     <div className="relative inline-flex items-end gap-2">
         <span className="relative text-[34px] font-semibold text-ink leading-none">
-        €56,95
+        €59,90
 
         {/* Strike line – ONLY over price */}
         <span
