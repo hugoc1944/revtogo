@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 const IMAGES = [
   "/gallery/1_v1.png",
+  "/gallery/2_d.png",
   "/gallery/2.png",
   "/gallery/3.png",
   "/gallery/4.png",
