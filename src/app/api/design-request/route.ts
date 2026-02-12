@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { sendAdminDesignRequestNotification, sendDesignRequestEmail } from "@/lib/email";
 
 /* =========================
    Validation Schema
@@ -91,10 +92,8 @@ export async function POST(req: Request) {
     /**
      * 2️⃣ If coming from Find Mission
      */
-    console.log("DATA SOURCE "+data.source+" --- DATA STOPID"+data.stopId);
     if (data.source === "find_mission" && data.stopId) {
 
-      console.log("AAAAAAAAAAAAA");
       const updatedStop = await prisma.findMissionStop.update({
         where: { id: data.stopId },
         data: {
@@ -132,6 +131,26 @@ export async function POST(req: Request) {
         });
       }
     }
+
+    await sendDesignRequestEmail({
+    to: data.contactEmail,
+    name: fullName,
+    businessName: data.businessName,
+    designStyle: data.designStyle,
+    deliveryMethod: data.deliveryMethod,
+    phone: data.contactPhone,
+    notes: data.notes,
+  });
+
+  await sendAdminDesignRequestNotification({
+    name: fullName,
+    email: data.contactEmail,
+    businessName: data.businessName,
+    designStyle: data.designStyle,
+    deliveryMethod: data.deliveryMethod,
+    phone: data.contactPhone,
+    notes: data.notes,
+  });
 
     return NextResponse.json(
       { success: true, id: designRequest.id },

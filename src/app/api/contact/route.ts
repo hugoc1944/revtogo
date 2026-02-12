@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendContactEmail } from "@/lib/email";
 
 /* 👇 REQUIRED FOR PRISMA */
 export const runtime = "nodejs";
@@ -50,7 +51,11 @@ export async function POST(req: Request) {
         source: "contact_page",
       },
     });
-
+    await sendContactEmail({
+      to: email,
+      name: `${firstName} ${lastName}`,
+    });
+    
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
     console.error("[CONTACT_POST_ERROR]", error);
@@ -61,3 +66,4 @@ export async function POST(req: Request) {
     );
   }
 }
+
