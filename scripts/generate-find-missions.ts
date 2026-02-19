@@ -6,9 +6,7 @@
 import "dotenv/config";
 import { PrismaClient, FindCategory } from "@prisma/client";
 
-const prisma = new PrismaClient({
-  accelerateUrl: process.env.DATABASE_URL,
-});
+const prisma = new PrismaClient();
 
 /* =========================
    CONFIG

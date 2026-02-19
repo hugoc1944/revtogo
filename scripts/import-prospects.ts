@@ -14,9 +14,7 @@ import { PrismaClient, ProspectCategory } from "@prisma/client";
  * Your project uses Prisma Accelerate.
  * So we must initialize Prisma exactly like Find+.
  */
-const prisma = new PrismaClient({
-  accelerateUrl: process.env.DATABASE_URL,
-});
+const prisma = new PrismaClient();
 
 const filePath = path.join(process.cwd(), "prospects.csv");
 

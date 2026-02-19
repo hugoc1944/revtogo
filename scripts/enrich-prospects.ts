@@ -7,9 +7,7 @@ import "dotenv/config";
 import axios from "axios";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient({
-  accelerateUrl: process.env.DATABASE_URL,
-});
+const prisma = new PrismaClient();
 
 const EMAIL_REGEX =
   /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
