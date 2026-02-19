@@ -68,7 +68,12 @@ enum RefusalReason {
   franchise
   language_barrier
 }
-
+enum ProspectCategory {
+  beauty
+  health
+  fitness
+  restaurant
+}
 
 /* =========================
    MODELS
@@ -292,4 +297,32 @@ model FindVisit {
   designRequest   DesignRequest? @relation(fields: [designRequestId], references: [id])
 
   @@index([outcome])
+}
+
+
+
+model Prospect {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  googlePlaceId String @unique
+  name          String
+  city          String
+
+  email     String?
+  phone     String?
+  whatsapp  String?
+  instagram String?
+  website   String?
+
+  category ProspectCategory
+
+  handled Boolean @default(false)
+
+  @@index([city])
+  @@index([category])
+  @@index([handled])
+  @@index([createdAt])
 }

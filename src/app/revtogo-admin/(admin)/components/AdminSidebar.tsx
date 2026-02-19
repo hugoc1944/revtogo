@@ -21,7 +21,7 @@ export function AdminSidebar() {
       <button
         onClick={() => router.push("/revtogo-admin/find")}
         className={`
-          mb-8
+          mb-3
           w-full
           px-4 py-3
           rounded-2xl
@@ -38,6 +38,29 @@ export function AdminSidebar() {
         `}
       >
         🚀 Revtogo Find+
+      </button>
+
+      {/* Prospect+ Button */}
+      <button
+        onClick={() => router.push("/revtogo-admin/prospect")}
+        className={`
+          mb-8
+          w-full
+          px-4 py-3
+          rounded-2xl
+          text-left
+          font-semibold
+          text-sm
+          shadow-md
+          transition-all
+          ${
+            isActive("/revtogo-admin/prospect")
+              ? "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white"
+              : "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white hover:scale-[1.03]"
+          }
+        `}
+      >
+        🎯 Prospect+
       </button>
 
       {/* Navigation */}
