@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createObjectCsvWriter } from "csv-writer";
 import dotenv from "dotenv";
+import fs from "fs";
 
 dotenv.config();
 
@@ -8,15 +9,12 @@ const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 if (!API_KEY) throw new Error("Missing Google Maps API key");
 
 /* -------------------------------------------------- */
-/* LIMITS */
-/* -------------------------------------------------- */
 
 const MAX_PER_KEYWORD = 20;
 const GLOBAL_LIMIT = 5000;
 const GRID_SIZE = 5;
+const OUTPUT = "outreach.csv";
 
-/* -------------------------------------------------- */
-/* TARGET REGIONS */
 /* -------------------------------------------------- */
 
 const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
@@ -25,10 +23,6 @@ const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
   Coimbra: { lat: 40.2033, lng: -8.4103 }
 };
 
-/* -------------------------------------------------- */
-/* KEYWORDS */
-/* -------------------------------------------------- */
-
 const KEYWORDS = [
   "restaurant","sushi restaurant","pizzeria","burger restaurant","cafe","bar",
   "hotel","hostel","guesthouse",
@@ -36,208 +30,155 @@ const KEYWORDS = [
 ];
 
 /* -------------------------------------------------- */
-/* HELPERS */
+/* CSV INIT (append mode) */
+/* -------------------------------------------------- */
+
+if (!fs.existsSync(OUTPUT)) {
+  fs.writeFileSync(OUTPUT, "Business Name,Location,Category,Email\n");
+}
+
+function appendRow(row: any) {
+  const line = `"${row.name.replace(/"/g,'""')}","${row.location.replace(/"/g,'""')}","${row.category}","${row.email}"\n`;
+  fs.appendFileSync(OUTPUT, line);
+}
+
 /* -------------------------------------------------- */
 
 function sleep(ms: number) {
   return new Promise(res => setTimeout(res, ms));
 }
 
-const EMAIL_REGEX =
-  /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-
-const MAILTO_REGEX =
-  /mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
-
-const BAD_EMAILS = ["example","test","noreply","no-reply","wix","wordpress","cloudflare","1@2x",".png",".jpg"];
-
-function cleanEmail(email: string) {
-  email = email.trim().replace(/["'<>]/g, "");
-  if (BAD_EMAILS.some(b => email.toLowerCase().includes(b))) return null;
-  return email;
+async function retry<T>(fn: () => Promise<T>, attempts = 5): Promise<T | null> {
+  for (let i = 0; i < attempts; i++) {
+    try { return await fn(); }
+    catch {
+      console.log("⚠ retrying...");
+      await sleep(2000 + i * 2000);
+    }
+  }
+  return null;
 }
 
 /* -------------------------------------------------- */
 /* EMAIL EXTRACTION */
 /* -------------------------------------------------- */
 
-async function extractEmail(website: string): Promise<string | null> {
+const EMAIL_REGEX=/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+const MAILTO_REGEX=/mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
+const BAD=["example","test","noreply","no-reply","wix","wordpress","cloudflare",".png",".jpg"];
 
-  if (!website.startsWith("http"))
-    website = "http://" + website;
+function clean(e:string){ if(BAD.some(b=>e.toLowerCase().includes(b))) return null; return e;}
 
-  const pages = [
-    website,
-    website + "/contact",
-    website + "/contactos",
-    website + "/about",
-    website + "/sobre"
-  ];
+async function extractEmail(site:string){
+  if(!site.startsWith("http")) site="http://"+site;
 
-  for (const url of pages) {
-    try {
-      const res = await axios.get(url, {
-        timeout: 8000,
-        maxRedirects: 5,
-        headers: { "User-Agent": "Mozilla/5.0" }
-      });
+  const pages=[site,site+"/contact",site+"/contactos",site+"/about",site+"/sobre"];
 
-      const html: string = res.data;
+  for(const url of pages){
+    try{
+      const r=await axios.get(url,{timeout:8000,headers:{"User-Agent":"Mozilla/5.0"}});
+      const html=r.data;
 
-      for (const m of html.matchAll(MAILTO_REGEX)) {
-        const email = cleanEmail(m[1]);
-        if (email) return email;
-      }
+      for(const m of html.matchAll(MAILTO_REGEX)){ const e=clean(m[1]); if(e) return e;}
+      const vis=html.match(EMAIL_REGEX);
+      if(vis) for(const e of vis){ const c=clean(e); if(c) return c;}
 
-      const matches = html.match(EMAIL_REGEX);
-      if (!matches) continue;
-
-      for (const e of matches) {
-        const email = cleanEmail(e);
-        if (email) return email;
-      }
-
-    } catch {}
+    }catch{}
   }
-
   return null;
 }
 
 /* -------------------------------------------------- */
-/* GOOGLE SEARCH */
+/* GOOGLE */
 /* -------------------------------------------------- */
 
-async function textSearchGrid(keyword: string, lat: number, lng: number, pageToken?: string) {
-
-  const query = `${keyword} near ${lat},${lng}`;
-
-  const res = await axios.post(
-    "https://places.googleapis.com/v1/places:searchText",
-    {
-      textQuery: query,
-      pageSize: 20,
-      pageToken
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": API_KEY!,
-        "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress"
-      }
-    }
-  );
-
-  return res.data;
+async function search(keyword:string,lat:number,lng:number,pageToken?:string){
+  return retry(async()=>{
+    const r=await axios.post("https://places.googleapis.com/v1/places:searchText",
+    {textQuery:`${keyword} near ${lat},${lng}`,pageSize:20,pageToken},
+    {headers:{"Content-Type":"application/json","X-Goog-Api-Key":API_KEY!,"X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress"}});
+    return r.data;
+  });
 }
 
-async function getDetails(placeId: string) {
-  const res = await axios.get(
-    `https://places.googleapis.com/v1/places/${placeId}`,
-    {
-      headers: {
-        "X-Goog-Api-Key": API_KEY!,
-        "X-Goog-FieldMask": "id,displayName,formattedAddress,websiteUri"
-      }
-    }
-  );
-  return res.data;
+async function details(id:string){
+  return retry(async()=>{
+    const r=await axios.get(`https://places.googleapis.com/v1/places/${id}`,
+    {headers:{"X-Goog-Api-Key":API_KEY!,"X-Goog-FieldMask":"id,displayName,formattedAddress,websiteUri"}});
+    return r.data;
+  });
 }
 
 /* -------------------------------------------------- */
-/* GRID */
-/* -------------------------------------------------- */
 
-function generateGrid(lat: number, lng: number, size: number) {
-  const points: { lat: number; lng: number }[] = [];
-  const step = 0.01;
-
-  for (let x = -size; x <= size; x++)
-    for (let y = -size; y <= size; y++)
-      points.push({ lat: lat + x * step, lng: lng + y * step });
-
-  return points;
+function grid(lat:number,lng:number,size:number){
+  const pts=[];
+  for(let x=-size;x<=size;x++)
+    for(let y=-size;y<=size;y++)
+      pts.push({lat:lat+x*0.01,lng:lng+y*0.01});
+  return pts;
 }
 
 /* -------------------------------------------------- */
-/* MAIN */
-/* -------------------------------------------------- */
 
-async function run() {
+async function run(){
 
-  const rows: any[] = [];
-  const seen = new Set<string>();
+  let total=0;
+  const seen=new Set<string>();
 
-  for (const city of Object.keys(CITY_COORDS)) {
+  for(const city of Object.keys(CITY_COORDS)){
 
-    console.log(`\n🌍 CITY: ${city}`);
-    const { lat, lng } = CITY_COORDS[city];
-    const grid = generateGrid(lat, lng, GRID_SIZE);
+    console.log("\n🌍",city);
+    const {lat,lng}=CITY_COORDS[city];
+    const g=grid(lat,lng,GRID_SIZE);
 
-    for (const keyword of KEYWORDS) {
+    for(const keyword of KEYWORDS){
 
-      let collected = 0;
-      console.log(`🔎 ${keyword}`);
+      let collected=0;
+      console.log("🔎",keyword);
 
-      for (const point of grid) {
+      for(const p of g){
 
-        if (collected >= MAX_PER_KEYWORD || rows.length >= GLOBAL_LIMIT) break;
+        if(collected>=MAX_PER_KEYWORD||total>=GLOBAL_LIMIT) break;
 
-        let pageToken: string | undefined = undefined;
+        let token: string|undefined=undefined;
 
-        do {
+        do{
           await sleep(250);
 
-          const search = await textSearchGrid(keyword, point.lat, point.lng, pageToken);
-          const places = search.places || [];
-          pageToken = search.nextPageToken;
+          const res=await search(keyword,p.lat,p.lng,token);
+          if(!res) continue;
 
-          for (const place of places) {
+          token=res.nextPageToken;
+          const places=res.places||[];
 
-            if (collected >= MAX_PER_KEYWORD || rows.length >= GLOBAL_LIMIT) break;
-            if (seen.has(place.id)) continue;
+          for(const place of places){
 
+            if(collected>=MAX_PER_KEYWORD||total>=GLOBAL_LIMIT) break;
+            if(seen.has(place.id)) continue;
             seen.add(place.id);
 
-            const details = await getDetails(place.id);
-            if (!details.websiteUri) continue;
+            const det=await details(place.id);
+            if(!det?.websiteUri) continue;
 
-            const email = await extractEmail(details.websiteUri);
-            if (!email) continue;
+            const email=await extractEmail(det.websiteUri);
+            if(!email){ console.log("✖",det.displayName?.text); continue;}
 
-            rows.push({
-            name: details.displayName?.text || "",
-            location: details.formattedAddress || "",
-            category: keyword,
-            email
-            });
+            const row={name:det.displayName?.text||"",location:det.formattedAddress||"",category:keyword,email};
+            appendRow(row);
 
-            collected++;
-            console.log(`✔ ${details.displayName?.text} → ${email}`);
+            collected++; total++;
+            console.log(`✔ ${row.name} → ${email} (${total})`);
           }
 
-          if (pageToken) await sleep(2000);
+          if(token) await sleep(2000);
 
-        } while (pageToken);
+        }while(token);
       }
-
-      console.log(`→ ${collected}/${MAX_PER_KEYWORD}`);
-      if (rows.length >= GLOBAL_LIMIT) break;
     }
   }
 
-  const csvWriter = createObjectCsvWriter({
-    path: "outreach.csv",
-    header: [
-      { id: "name", title: "Business Name" },
-      { id: "location", title: "Location" },
-      { id: "category", title: "Category" },
-      { id: "email", title: "Email" }
-    ],
-  });
-
-  await csvWriter.writeRecords(rows);
-
-  console.log(`\nDONE ✅ ${rows.length} contacts saved`);
+  console.log(`\nDONE — ${total} contacts saved safely.`);
 }
 
 run();

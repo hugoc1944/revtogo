@@ -1,9 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient({
-  accelerateUrl: process.env.DATABASE_URL!, 
-});
+const prisma = new PrismaClient();
+
 
 async function main() {
   const password = "@Rev2GO*";
