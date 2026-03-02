@@ -79,20 +79,20 @@ export function Hero() {
           <div className="absolute inset-x-0 top-[67vh] z-20 px-3">
             <MotionWrapper variants={fadeLeft}>
               <div className="text-center space-y-3">
-                <h1 className="text-h1-mobile font-semibold text-ink">
-                  Mais avaliações no Google.
+                <h1 className="text-h1-mobile font-bold text-ink">
+                  Apareça primeiro no Google.
                   <br />
-                  Pensado na sua marca.
+                  Mais avaliações. Mais clientes.
                 </h1>
 
                 <p className="text-body-mobile font-medium text-muted px-5">
-                  Uma placa premium com aproximação e QR code que torna a avaliação um
-                  gesto natural.
+                  Transforme cada visita numa oportunidade de avaliação.
+                  Sem apps. Sem fricção. Resultados visíveis em dias.
                 </p>
 
                 <div className="pt-2 flex justify-center">
                   <Button onClick={handleHeroCTA}>
-                    Ver a minha placa
+                    Pedir design sem compromisso
                   </Button>
                 </div>
               </div>
@@ -105,19 +105,19 @@ export function Hero() {
           <div className="grid md:grid-cols-[1.2fr_0.8fr] h-full items-center pt-[120px]">
             <MotionWrapper variants={fadeLeft}>
               <div className="space-y-6 max-w-2xl">
-                <h1 className="text-h1-desktop font-medium text-ink">
-                  Mais avaliações no Google.
+                <h1 className="text-h1-desktop font-bold text-ink">
+                   Apareça Primeiro no Google.
                   <br />
-                  Uma placa pensada na sua marca.
+                  Mais avaliações. Mais clientes.
                 </h1>
 
                 <p className="text-[20px] font-medium text-muted pr-25">
-                  Uma placa premium com aproximação e QR code, pensada para tornar a
-                  avaliação um gesto natural.
+                  Transforme cada visita numa oportunidade de avaliação.
+                  Sem apps. Sem fricção. Resultados visíveis em dias.
                 </p>
 
                 <Button onClick={handleHeroCTA}>
-                  Ver a minha placa
+                    Pedir design sem compromisso
                 </Button>
               </div>
             </MotionWrapper>

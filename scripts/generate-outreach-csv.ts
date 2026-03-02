@@ -95,11 +95,28 @@ async function extractEmail(site:string){
 async function search(keyword:string,lat:number,lng:number,pageToken?:string){
   return retry(async()=>{
     const r=await axios.post("https://places.googleapis.com/v1/places:searchText",
-    {textQuery:`${keyword} near ${lat},${lng}`,pageSize:20,pageToken},
-    {headers:{"Content-Type":"application/json","X-Goog-Api-Key":API_KEY!,"X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress"}});
+    {
+      textQuery: keyword,
+      pageSize:20,
+      pageToken,
+      locationBias:{
+        rectangle:{
+          low:{ latitude:lat-0.05, longitude:lng-0.05 },
+          high:{ latitude:lat+0.05, longitude:lng+0.05 }
+        }
+      }
+    },
+    {
+      headers:{
+        "Content-Type":"application/json",
+        "X-Goog-Api-Key":API_KEY!,
+        "X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress"
+      }
+    });
     return r.data;
   });
 }
+
 
 async function details(id:string){
   return retry(async()=>{
@@ -162,7 +179,7 @@ async function run(){
             if(!det?.websiteUri) continue;
 
             const email=await extractEmail(det.websiteUri);
-            if(!email){ console.log("✖",det.displayName?.text); continue;}
+            if(!email){ continue;}
 
             const row={name:det.displayName?.text||"",location:det.formattedAddress||"",category:keyword,email};
             appendRow(row);
