@@ -92,9 +92,19 @@ export default function ProgramaFundadorClient() {
                 <strong className="text-[#0FB5B9] text-[20px]">€37,90</strong>
               </p>
 
-              <p className="text-surface/70 text-[14px] leading-relaxed">
+              <p className="text-surface/70 text-[14px] leading-relaxed mb-6">
                 Pagamento único. Sem mensalidades. Sem taxas escondidas.
               </p>
+
+              {/* GARANTIA */}
+              <div className="">
+                <p className="text-[15px] leading-relaxed">
+                  <span className="text-[#0FB5B9] font-semibold">Garantia:</span>{" "}
+                  Se não ficar satisfeito com a sua placa ou com os resultados nos primeiros
+                  30 dias, pode solicitar a devolução total - sem perguntas, sem complicações.
+                </p>
+              </div>
+
             </div>
           </div>
         </section>
@@ -135,30 +145,29 @@ export default function ProgramaFundadorClient() {
           </div>
         </section>
 
-        {/* DESTAQUE FUNDADOR */}
-        <section className="pt-14 pb-12 border-t border-white/10">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="max-w-3xl">
-              <h2 className="text-[20px] md:text-[24px] font-semibold mb-4">
-                Destaque exclusivo para negócios fundadores
-              </h2>
+        {/* DESTAQUE FUNDADOR */}{/* VISIBILITY */}
+          <section className="pt-14 pb-5 border-t border-white/10">        <div className="mx-auto max-w-7xl px-4">
+            <div className="max-w-[720px]">
+            <h2 className="text-[22px] md:text-[26px] font-semibold mb-4">
+                Destaque público durante 12 meses
+            </h2>
 
-              <p className="text-surface/80 text-[16px] leading-relaxed mb-4">
-                Durante 12 meses, os negócios fundadores ficam posicionados
-                numa zona de destaque da landing page da Revtogo.
-              </p>
+            <p className="text-surface/80 text-[16px] leading-relaxed mb-4">
+                Os negócios do <strong className="text-surface">Programa Fundador Revtogo</strong>  não ficam apenas listados - ficam posicionados numa{" "}
+                <strong className="text-surface">zona nobre da landing page</strong>, 
+                imediatamente <strong className="text-surface">abaixo da secção do produto</strong>, 
+                onde se concentra a maior parte da atenção e interação.
+            </p>
 
-              <ul className="list-disc list-inside text-surface/80 space-y-2 mb-4">
-                <li>Fotografia real da instalação</li>
-                <li>Nome do negócio</li>
-                <li>Testemunho verificado</li>
-              </ul>
-
-              <p className="text-surface/80 text-[15px] leading-relaxed">
-                Exposição qualificada a visitantes interessados no produto.
-              </p>
+            <p className="text-surface/80 text-[16px] leading-relaxed mb-4">
+                <strong className="text-surface">
+                Veja abaixo a posição concreta que pode garantir.
+                </strong>{" "}
+                As posições são atribuídas por ordem de adesão e mantidas até{" "}
+                <strong className="text-surface">março de 2027</strong>.
+            </p>
             </div>
-          </div>
+        </div>
         </section>
 
         {/* CTA PRINCIPAL */}
