@@ -72,7 +72,7 @@ export function Hero() {
             />
           </div>
 
-          <div className="w-full bg-[#111c31] h-[20vh] -mt-[3vh]" />
+          <div className="w-full bg-[#131b2e] h-[26vh] -mt-[3vh]" />
 
           <div className="absolute inset-x-0 top-[67vh] z-20 px-3">
             <MotionWrapper variants={fadeLeft}>

@@ -286,8 +286,7 @@ ${template.body}`;
           </p>
         </div>
 
-        <div className="flex gap-3 items-center">
-          <button
+        <div className="flex flex-wrap gap-3 items-center max-w-full">          <button
             onClick={() => {
               setView("prospects");
               setPage(1);
@@ -337,9 +336,17 @@ ${template.body}`;
               setCity(e.target.value);
               setPage(1);
             }}
-            className="px-3 py-2 rounded-xl border border-gray-200 text-sm"
+            className="
+              px-3 py-2
+              rounded-xl
+              border border-gray-200
+              text-sm
+              max-w-[160px]
+              truncate
+            "
           >
             <option value="all">All Cities</option>
+
             {cities.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -540,20 +547,49 @@ ${template.body}`;
       </div>
 
       {/* PAGINATION */}
-      <div className="flex justify-center gap-2 pt-6">
-        {Array.from({ length: totalPages }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setPage(i + 1)}
-            className={`px-3 py-1 rounded-lg text-sm ${
-              page === i + 1
-                ? "bg-[#0ea5a8] text-white"
-                : "bg-gray-100"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
+      <div className="flex justify-center items-center gap-2 pt-6 flex-wrap">
+
+        {/* PREV */}
+        <button
+          disabled={page === 1}
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          className="px-3 py-1 rounded-lg text-sm bg-gray-100 disabled:opacity-40"
+        >
+          Prev
+        </button>
+
+        {(() => {
+          const pages: number[] = [];
+
+          const start = Math.max(1, page - 2);
+          const end = Math.min(totalPages, page + 2);
+
+          for (let i = start; i <= end; i++) {
+            pages.push(i);
+          }
+
+          return pages.map((p) => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              className={`px-3 py-1 rounded-lg text-sm ${
+                page === p ? "bg-[#0ea5a8] text-white" : "bg-gray-100"
+              }`}
+            >
+              {p}
+            </button>
+          ));
+        })()}
+
+        {/* NEXT */}
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+          className="px-3 py-1 rounded-lg text-sm bg-gray-100 disabled:opacity-40"
+        >
+          Next
+        </button>
+
       </div>
     </div>
   );

@@ -89,6 +89,8 @@ export async function POST(req: Request) {
       },
     });
 
+    const isManual = data.source === "manual_admin";
+
     /**
      * 2️⃣ If coming from Find Mission
      */
@@ -132,7 +134,8 @@ export async function POST(req: Request) {
       }
     }
 
-    await sendDesignRequestEmail({
+   if (!isManual) {
+  await sendDesignRequestEmail({
     to: data.contactEmail,
     name: fullName,
     businessName: data.businessName,
@@ -151,6 +154,7 @@ export async function POST(req: Request) {
     phone: data.contactPhone,
     notes: data.notes,
   });
+}
 
     return NextResponse.json(
       { success: true, id: designRequest.id },

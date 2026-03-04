@@ -12,7 +12,9 @@
     "fetch:prospects": "ts-node scripts/fetch-prospects.ts",
     "import:prospects": "ts-node scripts/import-prospects.ts",
     "enrich:prospects": "ts-node scripts/enrich-prospects.ts",
-    "outreach": "ts-node scripts/generate-outreach-csv.ts"
+    "outreach": "ts-node scripts/generate-outreach-csv.ts",
+    "outreachMobile": "tsx scripts/generate-outreach-mobile-csv.ts",
+    "importPhoneProspects": "tsx scripts/import-phone-prospects.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -46,6 +48,7 @@
     "eslint-config-next": "^0.2.4",
     "prisma": "6.19.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3"
   },
   "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",

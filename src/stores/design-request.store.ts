@@ -36,7 +36,10 @@ type DesignRequestStore = {
   step: DesignRequestStep;
   data: DesignRequestData;
 
+  isManual: boolean;
+
   open: () => void;
+  openManual: () => void;
   close: () => void;
 
   next: () => void;
@@ -61,11 +64,33 @@ export const useDesignRequestStore = create<DesignRequestStore>((set, get) => ({
   step: "business",
   data: {},
 
- open: () =>
-  set((state) => ({
-    isOpen: true,
-    step: state.data.googlePlaceId ? "contact" : "business",
-  })),
+  isManual: false,
+
+  open: () =>
+    set((state) => ({
+      isOpen: true,
+      step: state.data.googlePlaceId ? "contact" : "business",
+    })),
+
+  openManual: () =>
+    set(() => ({
+      isOpen: true,
+      isManual: true,
+      step: "business",
+      data: {
+        businessSource: "manual",
+
+        contactFirstName: "Manual",
+        contactLastName: "Pedido",
+        contactEmail: "pedidomanual@revtogo.pt",
+        contactPhone: "",
+
+        designStyle: "solid",
+        deliveryMethod: "email",
+
+        source: "manual_admin",
+      },
+    })),
 
   close: () =>
     set(() => ({
@@ -73,8 +98,15 @@ export const useDesignRequestStore = create<DesignRequestStore>((set, get) => ({
     })),
 
   next: () => {
-    const current = get().step;
-    const index = steps.indexOf(current);
+    const { step, isManual } = get();
+
+    // Manual mode: business -> summary
+    if (isManual && step === "business") {
+      set({ step: "summary" });
+      return;
+    }
+
+    const index = steps.indexOf(step);
     const nextStep = steps[index + 1];
 
     if (nextStep) {
@@ -83,8 +115,14 @@ export const useDesignRequestStore = create<DesignRequestStore>((set, get) => ({
   },
 
   back: () => {
-    const current = get().step;
-    const index = steps.indexOf(current);
+    const { step, isManual } = get();
+
+    if (isManual && step === "summary") {
+      set({ step: "business" });
+      return;
+    }
+
+    const index = steps.indexOf(step);
     const prevStep = steps[index - 1];
 
     if (prevStep) {
@@ -105,5 +143,6 @@ export const useDesignRequestStore = create<DesignRequestStore>((set, get) => ({
       isOpen: false,
       step: "business",
       data: {},
+      isManual: false,
     })),
 }));
