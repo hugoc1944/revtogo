@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="bg-bg">
-      <Header />
+      <Header variant="light"/>
       <Hero />
       <HowItWorks/>
       <ConceptSlider/>

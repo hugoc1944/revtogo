@@ -10,8 +10,8 @@ export function HowItWorks() {
       <div className="mx-auto max-w-7xl px-4">
         {/* Section title */}
         <h2 className="text-center text-h2-mobile md:text-h2-desktop font-semibold text-ink mb-8 md:mb-14">
-          Avaliações sem fricção, no{" "}
-          <span className="text-primary">momento certo!</span>
+          Transforme cada visita numa{" "}
+          <span className="text-primary">nova avaliação.</span>
         </h2>
 
         {/* ===== DESKTOP LAYOUT ===== */}
@@ -36,17 +36,18 @@ export function HowItWorks() {
                 <h3 className="text-[31px] font-semibold leading-[36px] mb-4">
                     O cliente aproxima o telemóvel.
                     <br />
-                    A avaliação abre.
+                    A avaliação abre em segundos.
                 </h3>
 
                 <p className="text-[16px] leading-[28px] text-white/90 mb-4">
                     Sem apps, sem pesquisas, sem instruções.
                     <br />
-                    A placa leva diretamente à página de avaliação do Google.
+                    Quanto mais simples o processo, mais avaliações recebe.
                 </p>
 
                 <p className="text-[16px] leading-[28px] italic text-white/90">
-                    Pensada para funcionar no dia a dia do seu espaço.
+                  Discreta para o cliente.
+                  Poderosa para o seu posicionamento no Google.                
                 </p>
                 </div>
             </MotionWrapper>

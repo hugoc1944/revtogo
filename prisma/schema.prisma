@@ -84,6 +84,14 @@ enum OutreachStatus {
   removed
 }
 
+enum LeadStatus {
+  pending
+  sent
+  replied
+  bounced
+  skipped
+}
+
 /* =========================
    MODELS
    ========================= */
@@ -349,4 +357,43 @@ model Prospect {
   @@index([category])
   @@index([handled])
   @@index([outreachStatus])
+}
+
+model Lead {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+
+  businessName String?
+
+  email String @unique
+
+  status LeadStatus @default(pending)
+
+  sentAt DateTime?
+  followUp1At DateTime?
+  followUp2At DateTime?
+
+  senderInbox String?
+
+  replyDetected Boolean @default(false)
+  bounceDetected Boolean @default(false)
+
+  @@index([email])
+  @@index([status])
+  @@index([businessName])
+}
+
+model EmailTemplate {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subject String
+  body String
+
+  active Boolean @default(true)
+
+  @@index([active])
 }

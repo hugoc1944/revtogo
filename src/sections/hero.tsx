@@ -47,16 +47,14 @@ export function Hero() {
       <div className="absolute inset-0 z-0 hidden md:block">
         <video
           className="absolute inset-0 w-full h-full object-cover object-[65%_15%]"
-          src="/header/desktop_video.mp4"
-          poster="/header/desktop_start.jpg"
+          src="/header/desktop_video1.mp4"
+          poster="/header/desktop_fallback.jpg"
           autoPlay
           muted
           playsInline
           preload="metadata"
         />
       </div>
-
-      <Header />
 
       {/* ===== CONTENT LAYER ===== */}
       <div className="relative z-10">
@@ -65,8 +63,8 @@ export function Hero() {
           <div className="relative w-full h-[82vh] overflow-hidden -top-[3vh]">
             <video
               className="absolute inset-0 w-full h-full object-cover object-[55%_10%]"
-              src="/header/mobile_video.mp4"
-              poster="/header/mobile_start.jpg"
+              src="/header/mobile_video1.mp4"
+              poster="/header/mobile_fallback.jpg"
               autoPlay
               muted
               playsInline
@@ -74,18 +72,18 @@ export function Hero() {
             />
           </div>
 
-          <div className="w-full bg-[#C8EFF1] h-[20vh] -mt-[3vh]" />
+          <div className="w-full bg-[#111c31] h-[20vh] -mt-[3vh]" />
 
           <div className="absolute inset-x-0 top-[67vh] z-20 px-3">
             <MotionWrapper variants={fadeLeft}>
               <div className="text-center space-y-3">
-                <h1 className="text-h1-mobile font-bold text-ink">
+                <h1 className="text-h1-mobile font-bold text-[#ffffff]">
                   Apareça primeiro no Google.
                   <br />
                   Mais avaliações. Mais clientes.
                 </h1>
 
-                <p className="text-body-mobile font-medium text-muted px-5">
+                <p className="text-body-mobile font-medium text-white/80 px-5">
                   Transforme cada visita numa oportunidade de avaliação.
                   Sem apps. Sem fricção. Resultados visíveis em dias.
                 </p>
@@ -105,13 +103,13 @@ export function Hero() {
           <div className="grid md:grid-cols-[1.2fr_0.8fr] h-full items-center pt-[120px]">
             <MotionWrapper variants={fadeLeft}>
               <div className="space-y-6 max-w-2xl">
-                <h1 className="text-h1-desktop font-bold text-ink">
+                <h1 className="text-h1-desktop font-bold text-[#ffffff]">
                    Apareça Primeiro no Google.
                   <br />
                   Mais avaliações. Mais clientes.
                 </h1>
 
-                <p className="text-[20px] font-medium text-muted pr-25">
+                <p className="text-[20px] font-medium text-white/90 pr-25">
                   Transforme cada visita numa oportunidade de avaliação.
                   Sem apps. Sem fricção. Resultados visíveis em dias.
                 </p>
