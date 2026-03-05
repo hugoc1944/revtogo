@@ -101,12 +101,14 @@ export default function ProspectsTable() {
   /* ---------------------------------- */
 
   async function markHandled(id: string) {
-    await fetch(`/revtogo-admin/api/prospect/${id}/handled`, {
-      method: "PATCH",
-    });
-    fetchData();
-  }
 
+  setData((prev) => prev.filter((p) => p.id !== id));
+  setTotalCount((prev) => prev - 1);
+
+  await fetch(`/revtogo-admin/api/prospect/${id}/handled`, {
+    method: "PATCH",
+  });
+}
  function buildWhatsAppLink(
   phone: string | null | undefined,
   businessName: string
