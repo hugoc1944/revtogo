@@ -107,23 +107,42 @@ export default function ProspectsTable() {
     fetchData();
   }
 
-  function buildWhatsAppLink(
-    phone: string | null | undefined,
-    businessName: string
-  ) {
-    if (!phone) return undefined;
+ function buildWhatsAppLink(
+  phone: string | null | undefined,
+  businessName: string
+) {
+  if (!phone) return undefined;
 
-    const cleaned = phone.replace(/\D/g, "");
+  const cleaned = phone.replace(/\D/g, "");
 
-    const message = [
-      `Olá 🙂`,,
-      `Posso partilhar convosco uma observação rápida sobre o vosso perfil no Google?`,,
-    ].join("\n");
-
-    return `https://api.whatsapp.com/send?phone=${cleaned}&text=${encodeURIComponent(
-      message
-    )}`;
+  function randomItem<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
   }
+
+  const greetings = [
+    `Olá 🙂 É o contacto do ${businessName}?`,
+    `Olá, bom dia 🙂 É o contacto do ${businessName}?`,
+    `Olá 🙂 Falo com o ${businessName}?`,
+    `Olá! Bom dia 🙂 É o ${businessName}?`
+  ];
+
+  const secondLines = [
+    `Posso partilhar convosco uma observação rápida sobre o vosso perfil no Google?`,
+    `Posso partilhar convosco uma observação rápida sobre o vosso perfil do Google?`,
+    `Posso fazer uma observação rápida sobre o vosso perfil no Google?`,
+    `Queria apenas partilhar uma observação rápida sobre o vosso perfil no Google.`
+  ];
+
+  const message = [
+    randomItem(greetings),
+    "",
+    randomItem(secondLines)
+  ].join("\n");
+
+  return `https://api.whatsapp.com/send?phone=${cleaned}&text=${encodeURIComponent(
+    message
+  )}`;
+}
 
   function buildGoogleSearchLink(name: string) {
     return `https://www.google.com/search?q=${encodeURIComponent(name)}`;
