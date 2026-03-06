@@ -21,7 +21,7 @@ export function HowItWorks() {
             <MotionWrapper variants={fadeUp}>
                 <div className="relative z-10 w-full h-[535px] rounded-2xl overflow-hidden bg-surface">
                 <Image
-                    src="/slider/C3_simplicity.png"
+                    src="/slider/C3_simplicity.jpg"
                     alt=""
                     fill
                     className="object-cover"

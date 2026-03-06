@@ -4,7 +4,7 @@ export const SLIDES = [
     title: "Uma presença física\nmuda a perceção",
     pill: "Presença e Confiança",
     icon: "/icons/slider_presence.png",
-    image: "/slider/C1_presence.jpg",
+    image: "/slider/C1_presence_v2.jpg",
     hoverTitle: "Presença e confiança",
     hoverText:
       "Uma placa física comunica legitimidade e atenção ao detalhe no espaço.",
