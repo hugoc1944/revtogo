@@ -12,9 +12,10 @@
     "fetch:prospects": "ts-node scripts/fetch-prospects.ts",
     "import:prospects": "ts-node scripts/import-prospects.ts",
     "enrich:prospects": "ts-node scripts/enrich-prospects.ts",
-    "outreach": "ts-node scripts/generate-outreach-csv.ts",
+    "outreach": "tsx scripts/generate-outreach-csv.ts",
     "outreachMobile": "tsx scripts/generate-outreach-mobile-csv.ts",
-    "importPhoneProspects": "tsx scripts/import-phone-prospects.ts"
+    "importPhoneProspects": "tsx scripts/import-phone-prospects.ts",
+    "sendEmailTemplates": "tsx scripts/seed-email-templates.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

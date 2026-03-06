@@ -18,88 +18,90 @@ async function run() {
       subject: "Pergunta rápida",
       body: `Olá,
 
-Encontrei o vosso negócio no Google enquanto procurava empresas na zona.
+Encontrei o vosso negócio no Google enquanto analisava empresas na zona.
 
-Reparei que já têm algumas boas avaliações, mas muitas vezes clientes satisfeitos acabam por não deixar avaliação simplesmente porque têm de procurar o negócio manualmente no Google.
+Reparei que já têm algumas boas avaliações, mas muitas vezes clientes satisfeitos acabam por não deixar feedback simplesmente porque têm de procurar o negócio manualmente no Google.
 
-Criámos uma forma muito simples de resolver isso.
+Somos a Revtogo, um projeto em Portugal que cria placas de reviews personalizadas que permitem ao cliente deixar uma avaliação Google em cerca de 5 segundos.
 
-Posso enviar um exemplo feito para o vosso negócio?
+O cliente aproxima o telemóvel da placa e abre diretamente a página de avaliação.
 
-Cumprimentos,`
+Posso enviar uma imagem exemplo feita para o vosso negócio, sem compromisso?`
     },
 
     {
       subject: "Sobre as avaliações no Google",
       body: `Olá,
 
-Hoje em dia muitas pessoas escolhem onde comprar ou que serviço usar apenas pelas avaliações no Google.
+Hoje em dia muitas pessoas escolhem onde ir apenas pelas avaliações no Google.
 
-O problema é que muitos clientes satisfeitos acabam por não deixar avaliação no momento.
+O problema é que muitos clientes satisfeitos até querem deixar avaliação, mas acabam por não o fazer porque teriam de procurar o negócio manualmente mais tarde.
 
-Criámos uma pequena solução que facilita bastante esse processo.
+Criámos uma placa simples que abre diretamente a página de avaliação do Google quando o cliente aproxima o telemóvel.
 
-Se quiser, posso enviar um exemplo feito para o vosso negócio.
+Assim a avaliação pode ser feita no momento, em poucos segundos.
 
-Cumprimentos,`
+Posso enviar uma imagem exemplo personalizada para o vosso negócio, sem compromisso?`
     },
 
     {
       subject: "Uma ideia rápida",
       body: `Olá,
 
-Encontrei o vosso negócio no Google.
+Enquanto analisava alguns negócios no Google reparei no vosso perfil.
 
-Temos ajudado várias empresas locais a receber mais avaliações simplesmente facilitando o momento em que o cliente decide deixar feedback.
+Muitos clientes ficam satisfeitos com o serviço mas acabam por não deixar avaliação porque o processo exige procurar o negócio manualmente no Google.
 
-É algo bastante simples.
+Na Revtogo criámos uma pequena solução para isso: uma placa física que abre automaticamente a página de avaliação do negócio quando o cliente aproxima o telemóvel.
 
-Quer que lhe envie um exemplo para o vosso espaço?
+Assim o processo passa de vários minutos para cerca de 5 segundos.
 
-Cumprimentos,`
+Posso enviar uma imagem exemplo feita para o vosso espaço, sem compromisso?`
     },
 
     {
       subject: "Pergunta rápida sobre avaliações",
       body: `Olá,
 
-Hoje em dia muitas pessoas confiam nas avaliações do Google antes de escolher um negócio.
+Uma das maiores dificuldades dos negócios locais hoje em dia é conseguir avaliações no Google, mesmo quando os clientes estão satisfeitos.
 
-O problema é que mesmo clientes satisfeitos raramente deixam avaliação no momento.
+Muitas vezes a intenção existe, mas o cliente acaba por não voltar ao Google para deixar feedback.
 
-Criámos uma forma simples de facilitar esse processo.
+Criámos uma placa personalizada que abre diretamente a página de avaliação do negócio quando o cliente aproxima o telemóvel.
 
-Posso enviar um exemplo feito para o vosso negócio?
+É uma forma muito simples de transformar esse momento numa avaliação real.
 
-Cumprimentos,`
+Posso enviar uma imagem exemplo personalizada para o vosso espaço, sem compromisso?`
     },
 
     {
       subject: "Uma pequena ideia",
       body: `Olá,
 
-Estava a analisar alguns negócios locais no Google e encontrei o vosso.
+Encontrei o vosso negócio no Google e reparei no perfil de avaliações.
 
-Temos ajudado várias empresas a aumentar o número de avaliações simplesmente facilitando o processo para o cliente.
+Muitos negócios têm clientes satisfeitos mas poucas avaliações porque o cliente teria de procurar o negócio manualmente mais tarde.
 
-Se quiser, posso enviar um exemplo rápido para ver se faria sentido para o vosso negócio.
+Na Revtogo criámos uma placa personalizada que permite ao cliente abrir a página de avaliação do Google em segundos.
 
-Cumprimentos,`
+Basta aproximar o telemóvel da placa.
+
+Posso enviar uma imagem exemplo feita para o vosso negócio, sem compromisso?`
     },
 
     {
       subject: "Ideia simples para avaliações",
       body: `Olá,
 
-Cada vez mais clientes escolhem empresas com base nas avaliações no Google.
+Estava a analisar alguns negócios locais no Google e encontrei o vosso.
 
-Temos ajudado alguns negócios a facilitar o momento em que o cliente deixa feedback.
+Muitos clientes até querem deixar avaliação, mas acabam por não o fazer porque teriam de procurar o negócio manualmente no Google.
 
-É algo bastante simples mas tem funcionado muito bem.
+Criámos uma pequena placa personalizada que abre diretamente a página de avaliação quando o cliente aproxima o telemóvel.
 
-Quer que lhe envie um exemplo para o vosso negócio?
+Assim a avaliação pode ser feita em poucos segundos, no próprio espaço.
 
-Cumprimentos,`
+Posso enviar uma imagem exemplo feita para o vosso espaço, sem compromisso?`
     },
 
     /* ============================= */

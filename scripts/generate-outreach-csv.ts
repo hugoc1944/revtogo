@@ -1,327 +1,318 @@
-import axios from "axios";
-import dotenv from "dotenv";
-import fs from "fs";
+import axios from "axios"
+import dotenv from "dotenv"
+import fs from "fs"
 
-dotenv.config();
+dotenv.config()
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-if (!API_KEY) throw new Error("Missing Google Maps API key");
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+if (!API_KEY) throw new Error("Missing Google Maps API key")
 
 /* -------------------------------------------------- */
 /* CONFIG */
 /* -------------------------------------------------- */
 
-const OUTPUT = "outreach.csv";
+const OUTPUT = "outreach.csv"
 
-const GLOBAL_LIMIT = 5000;
-const CONCURRENCY = 10;
+const GLOBAL_LIMIT = 5000
+const CONCURRENCY = 10
 
-const CITIES = [
-  "Aveiro",
-  "Coimbra",
-  "Figueira da Foz",
-  "Leiria",
-  "Caldas da Rainha",
-  "Tomar",
-  "Santarém",
-  "Torres Vedras",
-  "Lisboa",
-  "Setúbal"
-];
+const MAX_REVIEWS = 400
+const MIN_RATING = 3.5
+const MAX_RATING = 4.8
 
-const KEYWORDS = [
-  // hospitality
-  "restaurant",
-  "pizzeria",
-  "cafe",
-  "bar",
-  "hotel",
-  "hostel",
-  "guesthouse",
-  "pastelaria",
+/* -------------------------------------------------- */
+/* EMAIL VALIDATION */
+/* -------------------------------------------------- */
 
-  // beauty
-  "hair salon",
-  "barber shop",
-  "nail salon",
-  "beauty salon",
-  "esthetician",
-  "spa"
-];
+const EMAIL_REGEX =
+/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/
+
+const BAD_FILE_EXT = [
+".png",".jpg",".jpeg",".svg",".gif",".webp",".css",".js",".ico"
+]
+
+const BAD_DOMAINS = [
+"facebook.com",
+"instagram.com",
+"linkedin.com",
+"youtube.com",
+"tiktok.com",
+"tripadvisor",
+"booking.com",
+"linktr.ee",
+"canva.site",
+"zappysoftware",
+"ubereats",
+"justeat",
+"info.com"
+]
+
+const ALLOWED_TLDS = [
+".pt",".com",".com.pt",".net",".org",".eu"
+]
+
+function isValidEmail(email:string){
+
+  const e=email.toLowerCase()
+
+  if(!EMAIL_REGEX.test(e)) return false
+
+  if(BAD_FILE_EXT.some(ext=>e.endsWith(ext))) return false
+
+  if(BAD_DOMAINS.some(d=>e.includes(d))) return false
+
+  const domain=e.split("@")[1]
+
+  if(!domain) return false
+
+  if(!ALLOWED_TLDS.some(tld=>domain.endsWith(tld))) return false
+
+  return true
+}
 
 /* -------------------------------------------------- */
 /* CSV */
 /* -------------------------------------------------- */
 
-if (!fs.existsSync(OUTPUT)) {
-  fs.writeFileSync(OUTPUT, "Business Name,Email\n");
+if(!fs.existsSync(OUTPUT)){
+  fs.writeFileSync(OUTPUT,"Business Name,Email\n")
 }
 
-function appendRow(name: string, email: string) {
-  const line = `"${name.replace(/"/g, '""')}","${email}"\n`;
-  fs.appendFileSync(OUTPUT, line);
+function appendRow(name:string,email:string){
+
+  const line=`"${name.replace(/"/g,'""')}","${email}"\n`
+
+  fs.appendFileSync(OUTPUT,line)
+
 }
 
 /* -------------------------------------------------- */
-/* UTIL */
-/* -------------------------------------------------- */
 
-function sleep(ms: number) {
-  return new Promise(res => setTimeout(res, ms));
+function sleep(ms:number){
+  return new Promise(r=>setTimeout(r,ms))
 }
 
-async function retry<T>(fn: () => Promise<T>, attempts = 5): Promise<T | null> {
-  for (let i = 0; i < attempts; i++) {
-    try {
-      return await fn();
-    } catch {
-      await sleep(2000 + i * 2000);
+async function retry<T>(fn:()=>Promise<T>,attempts=5):Promise<T|null>{
+
+  for(let i=0;i<attempts;i++){
+
+    try{
+      return await fn()
+    }catch{
+      await sleep(2000+i*2000)
     }
+
   }
-  return null;
+
+  return null
+
 }
 
 /* -------------------------------------------------- */
-/* EMAIL EXTRACTION */
+/* EMAIL SCRAPER */
 /* -------------------------------------------------- */
 
-const EMAIL_REGEX =
-/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+async function extractEmail(site:string){
 
-const MAILTO_REGEX =
-/mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
+  try{
 
-const BAD = [
-  "example",
-  "test",
-  "noreply",
-  "no-reply",
-  "wix",
-  "wordpress",
-  "cloudflare",
-  "facebook",
-  "instagram",
-  ".png",
-  ".jpg",
-  ".jpeg",
-  ".svg",
-  ".webp",
-  ".gif",
-  ".css",
-  ".js"
-];
+    if(!site.startsWith("http")) site="https://"+site
 
-const BAD_DOMAINS = [
-  "facebook.com",
-  "instagram.com",
-  "linkedin.com",
-  "youtube.com",
-  "tiktok.com",
-  "twitter.com",
-  "domain.com",
-  "tripadvisor.pt",
-  "tripadvisor.es",
-  "tripadvisor.com",
-  "alicarius.pt"
-];
+    const pages=[
+      site,
+      site+"/contact",
+      site+"/contactos",
+      site+"/contacto",
+      site+"/about",
+      site+"/sobre"
+    ]
 
-function clean(email: string) {
-  const e = email.toLowerCase();
-  if (BAD.some(b => e.includes(b))) return null;
-  return email;
+    for(const url of pages){
+
+      try{
+
+        const r=await axios.get(url,{
+          timeout:8000,
+          headers:{ "User-Agent":"Mozilla/5.0" }
+        })
+
+        const html=r.data
+
+        const matches=html.match(EMAIL_REGEX)
+
+        if(!matches) continue
+
+        for(const email of matches){
+
+          if(isValidEmail(email)) return email
+
+        }
+
+      }catch{}
+
+    }
+
+  }catch{}
+
+  return null
+
 }
-
-function normalizeUrl(url: string) {
-  if (!url.startsWith("http")) return "https://" + url;
-  return url;
-}
-
 /* -------------------------------------------------- */
 /* EMAIL GUESSER */
 /* -------------------------------------------------- */
 
-function guessEmails(domain: string) {
-  const base = domain.replace("www.", "");
+function guessEmails(domain:string){
 
-  return [
+  const base=domain.replace("www.","")
+
+  const guesses=[
     `info@${base}`,
     `geral@${base}`,
     `contacto@${base}`,
     `contact@${base}`,
     `reservas@${base}`,
     `booking@${base}`
-  ];
-}
+  ]
 
-/* -------------------------------------------------- */
-/* FACEBOOK SCRAPER */
-/* -------------------------------------------------- */
+  for(const g of guesses){
 
-async function extractFacebookEmail(url: string) {
-  try {
-    const r = await axios.get(url, {
-      timeout: 8000,
-      headers: { "User-Agent": "Mozilla/5.0" }
-    });
-
-    const html = r.data;
-
-    const emails = html.match(EMAIL_REGEX);
-
-    if (!emails) return null;
-
-    for (const e of emails) {
-      const c = clean(e);
-      if (c) return c;
-    }
-
-  } catch {}
-
-  return null;
-}
-
-/* -------------------------------------------------- */
-/* WEBSITE EMAIL SCRAPER */
-/* -------------------------------------------------- */
-
-async function extractEmail(site: string) {
-
-  site = normalizeUrl(site);
-
-  const pages = [
-    site,
-    site + "/contact",
-    site + "/contacto",
-    site + "/contactos",
-    site + "/contato",
-    site + "/about",
-    site + "/sobre",
-    site + "/empresa",
-    site + "/quem-somos"
-  ];
-
-  for (const url of pages) {
-
-    try {
-
-      const r = await axios.get(url, {
-        timeout: 8000,
-        headers: { "User-Agent": "Mozilla/5.0" }
-      });
-
-      let html = r.data;
-
-      html = html
-        .replace(/\[at\]/g, "@")
-        .replace(/\(at\)/g, "@");
-
-      for (const m of html.matchAll(MAILTO_REGEX)) {
-        const e = clean(m[1]);
-        if (e) return e;
-      }
-
-      const emails = html.match(EMAIL_REGEX);
-
-      if (emails) {
-        for (const e of emails) {
-          const c = clean(e);
-          if (c) return c;
-        }
-      }
-
-      const facebook = html.match(/https?:\/\/(www\.)?facebook\.com\/[^\s"'<>]+/i);
-
-      if (facebook) {
-        const fbEmail = await extractFacebookEmail(facebook[0]);
-        if (fbEmail) return fbEmail;
-      }
-
-    } catch {}
+    if(isValidEmail(g)) return g
 
   }
 
-  return null;
+  return null
 }
 
 /* -------------------------------------------------- */
 /* GOOGLE SEARCH */
 /* -------------------------------------------------- */
 
-async function search(query: string, pageToken?: string) {
+async function search(keyword:string,lat:number,lng:number,pageToken?:string){
 
-  return retry(async () => {
+  return retry(async()=>{
 
-    const r = await axios.post(
+    const r=await axios.post(
+
       "https://places.googleapis.com/v1/places:searchText",
+
       {
-        textQuery: query,
-        pageSize: 20,
-        pageToken
+        textQuery:keyword,
+        pageSize:20,
+        pageToken,
+
+        locationBias:{
+          rectangle:{
+            low:{ latitude:lat-0.01, longitude:lng-0.01 },
+            high:{ latitude:lat+0.01, longitude:lng+0.01 }
+          }
+        }
+
       },
+
       {
-        headers: {
-          "Content-Type": "application/json",
-          "X-Goog-Api-Key": API_KEY!,
+        headers:{
+          "Content-Type":"application/json",
+          "X-Goog-Api-Key":API_KEY,
           "X-Goog-FieldMask":
-            "places.id,places.displayName,places.websiteUri"
+          "places.id,places.displayName,places.websiteUri,places.rating,places.userRatingCount"
         }
       }
-    );
 
-    return r.data;
+    )
 
-  });
+    return r.data
+
+  })
+
 }
 
 /* -------------------------------------------------- */
-/* WORKER POOL */
-/* -------------------------------------------------- */
 
-async function processBatch(places: any[], seenEmails: Set<string>, totalRef: {v:number}) {
+async function processBatch(
 
+  places:any[],
+  seenEmails:Set<string>,
+  totalRef:{v:number}
+
+){
+ 
   await Promise.allSettled(
 
-    places.map(async place => {
+    places.map(async place=>{
 
-      if (totalRef.v >= GLOBAL_LIMIT) return;
+      if(totalRef.v>=GLOBAL_LIMIT) return
 
-      const name = place.displayName?.text || "";
-      const website = place.websiteUri;
+      const name=place.displayName?.text||""
+      const reviews=place.userRatingCount
+      const rating=place.rating
 
-      if (!website) return;
+      if(!reviews) return
+      if(reviews>MAX_REVIEWS) return
+      if(rating && (rating<MIN_RATING || rating>MAX_RATING)) return
 
-      let email = await extractEmail(website);
+      const website=place.websiteUri
 
-      if (!email) {
+      if(!website) return
 
-        const domain = new URL(website).hostname.replace("www.","");
+      let email=await extractEmail(website)
 
-        if (BAD_DOMAINS.some(d => domain.includes(d))) return;
+      if(!email){
 
-        const guesses = guessEmails(domain);
+        try{
 
-        for (const g of guesses) {
-          if (!seenEmails.has(g)) {
-            email = g;
-            break;
-          }
-        }
+          const domain=new URL(website).hostname
+
+          email=guessEmails(domain)
+
+        }catch{}
+
       }
 
-      if (!email) return;
-      if (seenEmails.has(email)) return;
+      if(!email) return
+      if(!isValidEmail(email)) return
+      if(seenEmails.has(email)) return
 
-      seenEmails.add(email);
+      seenEmails.add(email)
 
-      appendRow(name, email);
+      appendRow(name,email)
 
-      totalRef.v++;
+      totalRef.v++
 
-      console.log(`✔ ${name} → ${email} (${totalRef.v})`);
+      console.log(`✔ ${name} → ${email} (${totalRef.v})`)
 
     })
 
-  );
+  )
+
+}
+
+/* -------------------------------------------------- */
+/* GRID */
+/* -------------------------------------------------- */
+
+function buildGrid(lat:number,lng:number){
+
+  const pts=[]
+
+  const GRID=5
+  const STEP=0.02
+
+  for(let x=-GRID;x<=GRID;x++){
+
+    for(let y=-GRID;y<=GRID;y++){
+
+      pts.push({
+
+        lat:lat+x*STEP,
+        lng:lng+y*STEP
+
+      })
+
+    }
+
+  }
+
+  return pts
 
 }
 
@@ -329,71 +320,139 @@ async function processBatch(places: any[], seenEmails: Set<string>, totalRef: {v
 /* MAIN */
 /* -------------------------------------------------- */
 
-async function run() {
+async function run(){
 
-  let totalRef = { v: 0 };
+  let totalRef={v:0}
 
-  const seenPlaces = new Set<string>();
-  const seenEmails = new Set<string>();
+  const seenPlaces=new Set<string>()
+  const seenEmails=new Set<string>()
 
-  for (const city of CITIES) {
+ const cities=[
 
-    console.log("\n🌍", city);
+  /* ---------- BEIRA INTERIOR ---------- */
 
-    for (const keyword of KEYWORDS) {
+  {name:"Covilhã",lat:40.2810,lng:-7.5040},
+  {name:"Fundão",lat:40.1408,lng:-7.5010},
+  {name:"Guarda",lat:40.5373,lng:-7.2670},
+  {name:"Castelo Branco",lat:39.8230,lng:-7.4910},
+  {name:"Belmonte",lat:40.3610,lng:-7.3500},
 
-      const query = `${keyword} in ${city} Portugal`;
+  /* ---------- BEIRA LITORAL ---------- */
 
-      console.log("🔎", query);
+  {name:"Coimbra",lat:40.2033,lng:-8.4103},
+  {name:"Figueira da Foz",lat:40.1521,lng:-8.8558},
+  {name:"Cantanhede",lat:40.3558,lng:-8.5940},
 
-      let token: string | undefined = undefined;
+  /* ---------- LEIRIA DISTRICT ---------- */
 
-      do {
+  {name:"Leiria",lat:39.7436,lng:-8.8071},
+  {name:"Pombal",lat:39.9160,lng:-8.6290},
 
-        const res = await search(query, token);
+  /* ---------- OESTE REGION ---------- */
 
-        if (!res) continue;
+  {name:"Caldas da Rainha",lat:39.4035,lng:-9.1383},
+  {name:"Óbidos",lat:39.3600,lng:-9.1570},
+  {name:"Peniche",lat:39.3558,lng:-9.3810},
 
-        token = res.nextPageToken;
+  /* ---------- RIBATEJO ---------- */
 
-        const places = res.places || [];
+  {name:"Santarém",lat:39.2362,lng:-8.6850},
+  {name:"Tomar",lat:39.6014,lng:-8.4092},
 
-        const batch = [];
+  /* ---------- LISBON METRO ---------- */
 
-        for (const p of places) {
+  {name:"Lisboa",lat:38.7223,lng:-9.1393},
+  {name:"Odivelas",lat:38.7920,lng:-9.1820},
+  {name:"Loures",lat:38.8300,lng:-9.1680},
+  {name:"Sintra",lat:38.8020,lng:-9.3810},
+  {name:"Cascais",lat:38.6970,lng:-9.4210},
+  {name:"Oeiras",lat:38.6970,lng:-9.3080},
+  {name:"Torres Vedras",lat:39.0911,lng:-9.2586},
 
-          if (seenPlaces.has(p.id)) continue;
+]
 
-          seenPlaces.add(p.id);
+  const keywords=[
 
-          batch.push(p);
+    "restaurant",
+    "pizzeria",
+    "cafe",
+    "bar",
+    "pastelaria",
+    "hair salon",
+    "barber shop",
+    "beauty salon",
+    "spa"
 
-          if (batch.length >= CONCURRENCY) {
-            await processBatch(batch.splice(0), seenEmails, totalRef);
+  ]
+
+  for(const city of cities){
+
+    console.log("\n🌍",city.name)
+
+    const grid=buildGrid(city.lat,city.lng)
+
+    for(const keyword of keywords){
+
+      console.log("🔎",keyword)
+
+      for(const tile of grid){
+
+        let token: string|undefined=undefined
+
+        do{
+
+          const res=await search(keyword,tile.lat,tile.lng,token)
+
+          if(!res) continue
+
+          token=res.nextPageToken
+
+          const places=res.places||[]
+
+          const batch=[]
+
+          for(const p of places){
+
+            if(seenPlaces.has(p.id)) continue
+
+            seenPlaces.add(p.id)
+
+            batch.push(p)
+
+            if(batch.length>=CONCURRENCY){
+
+              await processBatch(batch.splice(0),seenEmails,totalRef)
+
+            }
+
           }
 
-        }
+          if(batch.length){
 
-        if (batch.length) {
-          await processBatch(batch, seenEmails, totalRef);
-        }
+            await processBatch(batch,seenEmails,totalRef)
 
-        if (token) await sleep(2000);
+          }
 
-        if (totalRef.v >= GLOBAL_LIMIT) break;
+          if(token) await sleep(2000)
 
-      } while (token);
+          if(totalRef.v>=GLOBAL_LIMIT) break
 
-      if (totalRef.v >= GLOBAL_LIMIT) break;
+        }while(token)
+
+        if(totalRef.v>=GLOBAL_LIMIT) break
+
+      }
+
+      if(totalRef.v>=GLOBAL_LIMIT) break
 
     }
 
-    if (totalRef.v >= GLOBAL_LIMIT) break;
+    if(totalRef.v>=GLOBAL_LIMIT) break
 
   }
 
-  console.log(`\nDONE — ${totalRef.v} leads collected.`);
+  console.log(`\nDONE — ${totalRef.v} leads collected.`)
 
 }
 
-run();
+run()

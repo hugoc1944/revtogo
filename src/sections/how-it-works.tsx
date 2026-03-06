@@ -59,7 +59,7 @@ export function HowItWorks() {
           {/* Visual */}
           <div className="relative mx-auto w-full max-w-[320px] h-[340px] rounded-2xl overflow-hidden bg-surface">
             <Image
-              src="/slider/C3_simplicity.png"
+              src="/slider/C3_simplicity.jpg"
               alt=""
               fill
               className="object-cover"
